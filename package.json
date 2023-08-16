@@ -48,5 +48,11 @@
 	},
 	"svelte": "./dist/index.js",
 	"types": "./dist/index.d.ts",
-	"type": "module"
+	"type": "module",
+	"dependencies": {
+		"animejs": "^3.2.1",
+		"decimal.js": "^10.4.3",
+		"lodash": "^4.17.21",
+		"pure-uuid": "^1.6.2"
+	}
 }
