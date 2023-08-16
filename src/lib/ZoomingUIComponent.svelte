@@ -9,6 +9,11 @@
 
     // TODO : evaluate context api to pass down variables like : clientWidth and clientHeight ( and uuid of root zui ? )
 
+    onMount(() => {
+        const event = new CustomEvent('zui-notification', { detail: 'ZUI mounted' });
+        document.dispatchEvent(event);
+    });
+
 
 
 </script>
