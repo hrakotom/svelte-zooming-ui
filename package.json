@@ -52,6 +52,7 @@
 	"dependencies": {
 		"animejs": "^3.2.1",
 		"decimal.js": "^10.4.3",
+		"interactjs": "^1.10.18",
 		"lodash": "^4.17.21",
 		"pure-uuid": "^1.6.2"
 	}

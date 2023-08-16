@@ -1,9 +1,11 @@
 <script>
     import { onMount, onDestroy } from 'svelte';
+    import interact from 'interactjs';
+
     // Setup bound dimensions
     let width = null, height = null;
 
-    let id = "zui-" + Math.random().toString(36).substring(2);
+    let id = "zui-" + Math.random().toString(36).substring(2) + Math.random().toString(36).substring(2);
 
     // TODO : evaluate context api to pass down variables like : clientWidth and clientHeight ( and uuid of root zui ? )
 
