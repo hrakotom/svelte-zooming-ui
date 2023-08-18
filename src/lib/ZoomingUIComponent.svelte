@@ -1,6 +1,10 @@
 <script>
-    import { onMount, onDestroy } from 'svelte';
+    import { onMount, onDestroy, createEventDispatcher } from 'svelte';
+    import { browser } from '$app/environment';
+    import { ui_store, notify } from '$lib//utils.js';
     import interact from 'interactjs';
+    
+    export let verbose = false;
 
     // Setup bound dimensions
     let width = null, height = null;
@@ -10,10 +14,21 @@
     // TODO : evaluate context api to pass down variables like : clientWidth and clientHeight ( and uuid of root zui ? )
 
     onMount(() => {
-        const event = new CustomEvent('zui-notification', { detail: 'ZUI mounted' });
-        document.dispatchEvent(event);
+        notify("ZUI mounted");
+        console.log($ui_store.notifications);
     });
 
+    $: if(browser) {
+        if($ui_store && $ui_store.notifications && $ui_store.notifications.length > 0) {
+            if(!verbose) {
+                $ui_store.notifications = [];
+            } else {
+                while($ui_store.notifications.length > 0) {
+                    console.log($ui_store.notifications.shift());
+                }
+            }
+        }
+    }
 
 
 </script>
