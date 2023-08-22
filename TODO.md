@@ -6,4 +6,9 @@ Goal: Create an infinitely zooming user interface in svelte
 - (complete) setup package.json
 - (complete) setup sveltekit
 - create main zooming component
+  - Design the Component Interface
+  - Implement the Zooming Logic
+  - Create the Component Template
+  - Write Tests for the Component
+  - Document the Component
 
