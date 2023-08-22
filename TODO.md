@@ -3,7 +3,7 @@
 
 Goal: Create an infinitely zooming user interface in svelte
 - (complete) Create repo
-- setup package.json
-- setup sveltekit
+- (complete) setup package.json
+- (complete) setup sveltekit
 - create main zooming component
 
