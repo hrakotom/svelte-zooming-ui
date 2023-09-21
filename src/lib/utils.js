@@ -14,7 +14,7 @@ export function notify(message, type = "info", duration = 3000) {
         message: message,
         type: type,
         duration: duration,
-        uuid: uuid4()
+        uuid: ""+uuid4()
       });
       return value;
     });

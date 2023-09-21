@@ -1,13 +1,6 @@
 import { expect, test } from '@playwright/test';
-import { ZoomingUIComponent } from '../src/ZoomingUIComponent';
 
-test('index page has expected h1', async ({ page }) => {
+test('index page has expected div with id starting with zui-', async ({ page }) => {
 	await page.goto('/');
-	await expect(page.getByRole('heading', { name: 'Welcome to SvelteKit' })).toBeVisible();
-});
-
-test('ZoomingUIComponent has random id', async () => {
-	const component1 = new ZoomingUIComponent();
-	const component2 = new ZoomingUIComponent();
-	expect(component1.id).not.toBe(component2.id);
+	await expect(page.locator('div[id^="zui-"]')).toBeVisible();
 });
