@@ -44,7 +44,7 @@
 			h: Decimal(10000)
 		};
 
-		notify('ZUI mounted : ' + JSON.stringify(Object.keys($ui_store)));
+		notify('ZUI mounted : ' + JSON.stringify(Object.keys($ui_store.world[id])));
 	});
 
 	let resize = lodash.debounce(function (id, width, height) {
@@ -56,19 +56,15 @@
 			$ui_store.world[id]._tgt_camera.fov = $ui_store.world[id].camera.fov = Decimal(
 				(0.5 / Math.tan(Math.PI / 8)) * height
 			);
-			notify('window resized');
+			notify('component resized ('+ ++resizes +') : ' + width + ' x ' + height);
 		} catch (e) {
 			console.log('Error on window resize: ' + e);
 		}
 	}, 50);
 
 	$: if(BROWSER){
-	    console.log("Calling resize : " + resizes++);
-        try {
-            resize(id, width, height);
-        } catch (e) {
-            console.log("Error on window resize: " + e);
-        }
+	    // console.log("Calling resize : " + ++resizes);
+        resize(id, width, height);
 	}
 	$: if (BROWSER && $ui_store.world) {
 		console.log('Current stores: ' + JSON.stringify(Object.keys($ui_store.world)));
