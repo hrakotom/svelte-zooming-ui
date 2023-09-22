@@ -13,7 +13,7 @@
 		height = null;
 
 	let id = 'zui-' + uuid4();
-    let resizes = 0;
+	let resizes = 0;
 
 	// TODO : evaluate context api to pass down variables like : clientWidth and clientHeight ( and uuid of root zui ? )
 
@@ -49,35 +49,33 @@
 
 	let resize = lodash.debounce(function (id, width, height) {
 		// console.log("Actual resize call");
-
 		try {
 			$ui_store.world[id]._tgt_camera.w = $ui_store.world[id].camera.w = Decimal(width);
 			$ui_store.world[id]._tgt_camera.h = $ui_store.world[id].camera.h = Decimal(height);
 			$ui_store.world[id]._tgt_camera.fov = $ui_store.world[id].camera.fov = Decimal(
 				(0.5 / Math.tan(Math.PI / 8)) * height
 			);
-			notify('component resized ('+ ++resizes +') : ' + width + ' x ' + height);
+			notify('component resized (' + ++resizes + ') : ' + width + ' x ' + height);
 		} catch (e) {
 			console.log('Error on window resize: ' + e);
 		}
 	}, 50);
 
-	$: if(BROWSER){
-	    // console.log("Calling resize : " + ++resizes);
-        resize(id, width, height);
+	$: if (BROWSER) {
+		// console.log("Calling resize : " + ++resizes);
+		resize(id, width, height);
 	}
 	$: if (BROWSER && $ui_store.world) {
 		console.log('Current stores: ' + JSON.stringify(Object.keys($ui_store.world)));
 	}
 
 	onDestroy(() => {
-        // console.log("In destroy hook");
+		// console.log("In destroy hook");
 		if ($ui_store && $ui_store.world && $ui_store.world[id]) {
 			// console.log('Killing uid');
 			delete $ui_store.world[id];
 		}
 	});
-
 </script>
 
 <div
