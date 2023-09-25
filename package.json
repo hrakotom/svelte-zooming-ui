@@ -40,16 +40,17 @@
 		"tslib": "^2.4.1",
 		"typescript": "^5.0.0",
 		"vite": "^4.4.2",
-		"vitest": "^0.32.2"
+		"animejs": "^3.2.1",
+		"decimal.js": "^10.4.3",
+		"esm-env": "^1.0.0",
+		"interactjs": "^1.10.19",
+		"vitest": "^0.32.2",
+		"lodash": "^4.17.21",
+		"pure-uuid": "^1.8.1"
 	},
 	"svelte": "./dist/index.js",
 	"types": "./dist/index.d.ts",
 	"type": "module",
 	"dependencies": {
-		"decimal.js": "^10.4.3",
-		"esm-env": "^1.0.0",
-		"interactjs": "^1.10.19",
-		"lodash": "^4.17.21",
-		"pure-uuid": "^1.8.1"
 	}
 }
