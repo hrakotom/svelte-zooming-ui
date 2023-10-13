@@ -23,7 +23,9 @@
 </script>
 
 <div style="border:solid green 2px;width:25%;height:50%;transform:translate(-50%,-50%);top:50%;left:75%;position:absolute;">
-    <ZUI on:zui-notification={handleZuiNotification}/>
+    <ZUI on:zui-notification={handleZuiNotification}>
+        
+    </ZUI>
 </div>
 <div style="border:solid blue 2px;width:25%;height:50%;transform:translate(-50%,-50%);top:50%;left:25%;position:absolute;">
     <ZUI on:zui-notification={handleZuiNotification}/>
