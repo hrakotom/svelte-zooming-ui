@@ -6,5 +6,5 @@ Specification: A zooming user interface that just works. Like you imagined it wo
 
 ## To-Do List
 
-- [ ] create two basic components for the zui.
+- [x] create two basic components for the zui.
 - [ ] Each zui component has zooming capability.
