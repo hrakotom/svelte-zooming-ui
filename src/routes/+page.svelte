@@ -3,6 +3,7 @@
     import ZUI from '$lib/ZoomingUIComponent.svelte';
     import { ui_store } from '$lib//utils.js';
     import Positionable from '$lib/Positionable.svelte';
+    import Decimal from 'decimal.js';
 
     let verbose = true;
 
@@ -25,11 +26,11 @@
 
 <div style="border:solid green 2px;width:25%;height:50%;transform:translate(-50%,-50%);top:50%;left:75%;position:absolute;">
     <ZUI on:zui-notification={handleZuiNotification}>
-        <Positionable x={100} y={100} width={50} height={50}>
+        <Positionable x={Decimal(100)} y={Decimal(100)} width={Decimal(50)} height={Decimal(50)} depth={Decimal(1)}>
             <div style="background-color: yellow;">Positionable Element</div>
         </Positionable>
     </ZUI>
 </div>
-<div style="border:solid blue 2px;width:25%;height:50%;transform:translate(-50%,-50%);top:50%;left:25%;position:absolute;">
+<!-- <div style="border:solid blue 2px;width:25%;height:50%;transform:translate(-50%,-50%);top:50%;left:25%;position:absolute;">
     <ZUI on:zui-notification={handleZuiNotification}/>
-</div>
+</div> -->

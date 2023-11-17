@@ -1,12 +1,12 @@
 <script>
-	import { onMount, onDestroy, createEventDispatcher } from 'svelte';
+	import { onMount, onDestroy, createEventDispatcher, setContext } from 'svelte';
 	import { BROWSER } from 'esm-env';
 	import { ui_store, notify, uuid4 } from '$lib//utils.js';
 	import Decimal from 'decimal.js';
 	import lodash from 'lodash';
 	import interact from 'interactjs';
     import anime from "animejs";
-
+	
 	// Setup bound dimensions
 	let width = null,
 		height = null;
@@ -332,6 +332,9 @@
 			delete $ui_store.world[id];
 		}
 	});
+
+	setContext("zui-id", id);
+	setContext("zui-store", ui_store);
 </script>
 
 <div

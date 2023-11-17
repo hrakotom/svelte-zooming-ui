@@ -1,5 +1,7 @@
 import UUID from "pure-uuid";
 import { writable } from 'svelte/store';
+import Decimal from "decimal.js";
+import anime from "animejs";
 
 export function uuid4() {
   return new UUID(4);
@@ -18,6 +20,29 @@ export function notify(message, type = "info", duration = 3000) {
     });
     return value;
   });
+}
+
+export function getBBox(x, y, width, height, offset) {
+
+  if (!offset) offset = 0;
+
+  return {
+    left: x.minus(width.dividedBy(2)).minus(offset),
+    right: x.plus(width.dividedBy(2)).plus(offset),
+    top: y.plus(height.dividedBy(2)).plus(offset),
+    bottom: y.minus(height.dividedBy(2)).minus(offset)
+  };
+}
+
+export function intersectsBBox(r1, r2) {
+
+  return !(
+    r2.left.gt(r1.right) ||
+    r2.right.lt(r1.left) ||
+    r2.top.lt(r1.bottom) ||
+    r2.bottom.gt(r1.top)
+  );
+
 }
 
 export function evaluateCoords(params) {
@@ -53,12 +78,12 @@ export function evaluateCoords(params) {
     current_ratio = height.dividedBy(camera.h).times(camera.scale);
     visibility = intersectsBBox(getBBox(x, y, width, height, 0), getBBox(camera.x, camera.y, camera.w.dividedBy(camera.scale), camera.h.dividedBy(camera.scale), 0)) // potential offset : camera.h.dividedBy(camera.scale)
   }
-  // visibility = true;
-  if (!visibility) {
-    return {
-      visible: false
-    }
-  }
+  visibility = true;
+  // if (!visibility) {
+  //   return {
+  //     visible: false
+  //   }
+  // }
 
   let tgt_width = Decimal(item.reference_width);
   let tgt_height = (height.dividedBy(scalesize));
@@ -94,6 +119,7 @@ export function evaluateCoords(params) {
 export function positionable(node, params) {
 
   let item = evaluateCoords(params);
+  console.log("Params: " + JSON.stringify(params));
   if (item.visible) {
     node.style = "position:absolute;top:0px;left:0px;transform:" + item.transform + ";width:" + item.tgt_width.toNumber() + "px;height:" + item.tgt_height.toNumber() + "px;zIndex:" + item.depth.toNumber() + ";" + (params.extra_style ? params.extra_style : "");
   } else {
@@ -102,7 +128,7 @@ export function positionable(node, params) {
   // console.log("Visibility: " + item.visible);
   return {
     update: function (newParams) {
-      if (newParams.flagged) console.log("Params updated to: " + newParams.height);
+      // if (newParams.flagged) console.log("Params updated to: " + newParams.height);
       let item = evaluateCoords(newParams);
       if (item.visible) {
         // console.log("TEST : " + newParams.extra_style);
@@ -111,11 +137,11 @@ export function positionable(node, params) {
       } else {
         node.style = "display:none;";
       }
-      if (params.flagged) console.log("Visibility: " + item.visible);
+      //if (params.flagged) console.log("Visibility: " + item.visible);
 
     },
     destroy: function () {
-      if (params.flagged) console.log("positionable was destroyed");
+      //if (params.flagged) console.log("positionable was destroyed");
       anime.remove(node);
     }
   }
