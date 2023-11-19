@@ -2,6 +2,7 @@ import UUID from "pure-uuid";
 import { writable } from 'svelte/store';
 import Decimal from "decimal.js";
 import anime from "animejs";
+import {beforeUpdate} from 'svelte'
 
 export function uuid4() {
   return new UUID(4);
@@ -146,4 +147,43 @@ export function positionable(node, params) {
     }
   }
 
+}
+
+export function positioned(el, store) {
+
+  let dirty;
+
+  let updater = function getScreenPosition(node) {
+		if (node) {
+			let rect = node.getBoundingClientRect();
+			return {
+				x: Decimal(rect.x),
+				y: Decimal(rect.y),
+				w: Decimal(rect.width),
+				h: Decimal(rect.height)
+			};
+		}
+	};
+
+
+  beforeUpdate(() => {
+		if (dirty) store.set(updater(el))
+		dirty = false;
+	});
+	
+	if(ResizeObserver) {
+		const resizeObserver = new ResizeObserver(entries => {
+			for (let entry of entries) {
+				dirty = true;
+				//force before update to run;
+				store.set(null)
+			}
+    });
+		
+	  resizeObserver.observe(el);
+		
+		return {
+			destroy() { resizeObserver.unobserve(el); }
+		}
+	}
 }

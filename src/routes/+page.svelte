@@ -26,9 +26,9 @@
 
 <div style="border:solid green 2px;width:25%;height:50%;transform:translate(-50%,-50%);top:50%;left:75%;position:absolute;">
     <ZUI on:zui-notification={handleZuiNotification}>
-        <Positionable x={Decimal(100)} y={Decimal(100)} width={Decimal(50)} height={Decimal(50)} depth={Decimal(1)}>
+        <!-- <Positionable x={Decimal(100)} y={Decimal(100)} width={Decimal(50)} height={Decimal(50)} depth={Decimal(1)}>
             <div style="background-color: yellow;">Positionable Element</div>
-        </Positionable>
+        </Positionable> -->
     </ZUI>
 </div>
 <!-- <div style="border:solid blue 2px;width:25%;height:50%;transform:translate(-50%,-50%);top:50%;left:25%;position:absolute;">
