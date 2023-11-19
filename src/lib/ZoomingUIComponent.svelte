@@ -7,9 +7,11 @@
 	import interact from 'interactjs';
     import anime from "animejs";
 	
-	// Setup bound dimensions
+	// Setup bound dimensions and positions
 	let width = null,
-		height = null;
+		height = null,
+		x = null,
+		y = null;
 
 	let id = 'zui-' + uuid4();
 	let resizes = 0;
