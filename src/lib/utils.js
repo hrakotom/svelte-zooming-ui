@@ -51,7 +51,7 @@ export function intersectsBBox(r1, r2) {
 
 // action to get position and size of an element
 // as an alternative to svelte bind:this
-export function positioned(el, store) {
+export function resizeObserved(el, store) {
 
   let dirty;
 
