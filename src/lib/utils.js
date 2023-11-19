@@ -5,12 +5,15 @@ import anime from "animejs";
 import {beforeUpdate} from 'svelte'
 
 export function uuid4() {
+  // Generates a version 4 UUID (random)
   return new UUID(4);
 }
 
 export const ui_store = writable({});
+// A writable Svelte store to hold UI state, such as notifications
 
 export function notify(message, type = "info", duration = 3000) {
+  // Sends a notification message to the UI store
   ui_store.update(function (value) {
     if (!value.notifications) value.notifications = [];
     value.notifications.push({
