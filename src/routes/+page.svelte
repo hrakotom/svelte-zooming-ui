@@ -1,7 +1,6 @@
 <script>
     import { BROWSER } from 'esm-env';
     import ZUI from '$lib/ZoomingUIComponent.svelte';
-    import { ui_store } from '$lib//utils.js';
     import Positionable from '$lib/Positionable.svelte';
     import Decimal from 'decimal.js';
 
@@ -9,17 +8,6 @@
 
     function handleZuiNotification(event) {
         console.log("ZUI notification: " + event.detail);
-    }
-    $: if(BROWSER) {
-        if($ui_store && $ui_store.notifications && $ui_store.notifications.length > 0) {
-            if(!verbose) {
-                $ui_store.notifications = [];
-            } else {
-                while($ui_store.notifications.length > 0) {
-                    console.log("INFO: " + $ui_store.notifications.shift().message);
-                }
-            }
-        }
     }
 
 </script>

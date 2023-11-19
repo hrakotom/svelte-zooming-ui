@@ -33,33 +33,20 @@
     onDestroy(() => {
 	});
 
-	function getScreenPosition(node) {
-		if (node) {
-			let rect = node.getBoundingClientRect();
-			return {
-				x: Decimal(rect.x),
-				y: Decimal(rect.y),
-				w: Decimal(rect.width),
-				h: Decimal(rect.height)
-			};
-		}
-	}
-
-
 </script>
 
 <div
 	{id}
 	style="position:absolute;box-sizing:border-box;border:solid red 1px;width:100%;height:100%;top:0px;left:0px;"
-		use:positioned={[screen, getScreenPosition]}
+		use:positioned={screen}
 	>
-		<pre>
+		<pre style="font-family:'Courier New', Courier, monospace;font-size:10px;">
 			{ JSON.stringify($screen, null, ' ') }
 		</pre>
 	<div
 		style="position:absolute;padding:5px;font-size:xx-small;bottom:-20px;right:1px;font-family:Courier;"
 	>
-		{width} x {height}
+		{Math.round($screen.w)} x {Math.round($screen.h)}
 	</div>
 	<slot />
 </div>
