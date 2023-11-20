@@ -1,33 +1,43 @@
 <script>
-	import { onMount, onDestroy, getContext } from 'svelte'; // Lifecycle hooks ( cycle de vie du composant : onMount = au montage du composant, onDestroy = au démontage du composant)
-	import { fade } from 'svelte/transition'; // Transitions
+	import { onMount, onDestroy, getContext } from 'svelte';
+	import { fade } from 'svelte/transition';
 	import { BROWSER } from 'esm-env';
-	import Decimal from 'decimal.js'; // Librairie pour les calculs avec des décimales ( très larges )
-	import {  } from '$lib/utils.js'; // Utilitaires
-	import compare from 'just-compare'; // Outil de comparaison d'objets ( deep )
+	import Decimal from 'decimal.js';
+	import {} from '$lib/utils.js';
+	import compare from 'just-compare';
 
-	export let x, y, width, height, depth, reference_width = 500;
+	export let x,
+		y,
+		width,
+		height,
+		depth,
+		reference_width = 500;
+		
+	export let debug = false;
 
 	let params = null;
 	let evaluated = null;
 
-    let zuid = getContext("zui-id");
+	let zuid = getContext('zui-id');
 
-
-    onMount(function(){
-        console.log("ZUI-ID="+zuid);
-    })
+	onMount(function () {
+		console.log('ZUI-ID=' + zuid);
+	});
 
 	// Exemple de gestion d'evenement click
 	function clickIt(evt) {
 		evt.stopPropagation();
 		console.log('Click event');
 	}
-
 </script>
 
-<!-- S'affiche uniquement si l'objet est visible a l'oeil nu ET qu'il ne soit pas trop grand -->
-<!-- {#if BROWSER && evaluated && evaluated.ratio > 0.1 && evaluated.ratio < 100} -->
-	<!-- svelte-ignore a11y-click-events-have-key-events -->
-	<div use:positionable={params} in:fade class="">Hello there</div>
-<!-- {/if} -->
+<div style="position:absolute;border:solid red 1px;">
+	{#if debug}
+		<div
+			style="position:absolute;padding:5px;font-size:xx-small;bottom:-20px;right:1px;font-family:Courier;border:solid rgba(0,0,0,0.2) 1px;transform:translate(2%,70%);border-radius:3px;padding:11px;"
+		>
+			x: {Math.round(x)}, y: {Math.round(y)}<br />{Math.round(width)} x {Math.round(height)}
+		</div>
+	{/if}
+	<slot />
+</div>

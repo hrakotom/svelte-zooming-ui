@@ -8,6 +8,8 @@
 	import interact from 'interactjs';
     import anime from "animejs";
 	
+	export let debug = false;
+
 	let id = 'zui-' + uuid4();
 	let resizes = 0;
 
@@ -17,7 +19,18 @@
 		w: Decimal(0),
 		h: Decimal(0)
 	});
+
+	let camera = writable({
+		x: Decimal(0),
+		y: Decimal(0),
+		z: Decimal(0),
+		scale: Decimal(1),
+		w: Decimal(10000),
+		h: Decimal(10000)
+	});
+
 	setContext('screen', screen);
+	setContext('camera', camera);
 
 	onMount(() => {
 	});
@@ -32,13 +45,13 @@
 	style="position:absolute;box-sizing:border-box;border:solid red 1px;width:100%;height:100%;top:0px;left:0px;"
 		use:positionObserved={screen}
 	>
-		<pre style="font-family:'Courier New', Courier, monospace;font-size:10px;">
-			{ JSON.stringify({x: Math.round($screen.x), y: Math.round($screen.y), width: Math.round($screen.w), height: Math.round($screen.h)}, null, ' ') }
-		</pre>
-	<div
-		style="position:absolute;padding:5px;font-size:xx-small;bottom:-20px;right:1px;font-family:Courier;"
-	>
-		{Math.round($screen.w)} x {Math.round($screen.h)}
-	</div>
+		debug: {debug}
+		{#if debug}
+			<div
+				style="position:absolute;padding:5px;font-size:xx-small;bottom:-20px;right:1px;font-family:Courier;border:solid rgba(0,0,0,0.2) 1px;transform:translate(2%,70%);border-radius:3px;padding:11px;"
+			>
+				x: {Math.round($screen.x)}, y: {Math.round($screen.y)}<br/>{Math.round($screen.w)} x {Math.round($screen.h)}
+			</div>
+		{/if}
 	<slot />
 </div>
