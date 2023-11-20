@@ -9,20 +9,6 @@ export function uuid4() {
   return new UUID(4);
 }
 
-export function notify(message, type = "info", duration = 3000) {
-  // Sends a notification message to the UI store
-  ui_store.update(function (value) {
-    if (!value.notifications) value.notifications = [];
-    value.notifications.push({
-      message: message,
-      type: type,
-      duration: duration,
-      uuid: "" + uuid4()
-    });
-    return value;
-  });
-}
-
 // Gets the bbox of coordinates, offset can be used to
 // expand/shrink the resulting bbox
 export function getBBox(x, y, width, height, offset) {

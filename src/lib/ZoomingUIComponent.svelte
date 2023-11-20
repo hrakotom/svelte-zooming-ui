@@ -2,7 +2,7 @@
 	import { onMount, onDestroy, createEventDispatcher, setContext } from 'svelte';
 	import { writable } from 'svelte/store';
 	import { BROWSER } from 'esm-env';
-	import { notify, uuid4, positionObserved } from '$lib//utils.js';
+	import { uuid4, positionObserved } from '$lib//utils.js';
 	import Decimal from 'decimal.js';
 	import lodash from 'lodash';
 	import interact from 'interactjs';
@@ -48,7 +48,7 @@
 		$camera.h 		= Decimal($screen.h);
 		$camera.fov 	= Decimal((0.5 / Math.tan(Math.PI / 8)) * $screen.h);
 
-	}, 300);
+	}, 50);
 
 
 	// Reactive camera setup
@@ -56,6 +56,7 @@
 		let current_screen = JSON.stringify($screen);
 		if(current_screen != previous_screen){
 			previous_screen = current_screen;
+			// console.log("Screen dims changed : " + JSON.stringify($screen, null, ' '));
 			screenResized();
 		}
 	}
@@ -64,16 +65,16 @@
 
 <div
 	{id}
-	style="position:absolute;box-sizing:border-box;border:solid red 1px;width:100%;height:100%;top:0px;left:0px;"
+	style="position:absolute;box-sizing:border-box;border:solid red 1px;width:100%;height:100%;top:0px;left:0px;overflow:hidden;"
 		use:positionObserved={screen}
 	>
-		debug: {debug}
-		{#if debug}
-			<div
-				style="position:absolute;padding:5px;font-size:xx-small;bottom:-20px;right:1px;font-family:Courier;border:solid rgba(0,0,0,0.2) 1px;transform:translate(2%,70%);border-radius:3px;padding:11px;"
-			>
-				x: {Math.round($screen.x)}, y: {Math.round($screen.y)}<br/>{Math.round($screen.w)} x {Math.round($screen.h)}
-			</div>
-		{/if}
+		<!-- debug: {debug} -->
 	<slot />
+	<!-- {#if debug}
+		<div
+			style="position:absolute;padding:5px;font-size:xx-small;bottom:-20px;right:1px;font-family:Courier;border:solid rgba(0,0,0,0.2) 1px;transform:translate(2%,70%);border-radius:3px;padding:11px;"
+		>
+			x: {Math.round($screen.x)}, y: {Math.round($screen.y)}<br/>{Math.round($screen.w)} x {Math.round($screen.h)}
+		</div>
+	{/if} -->
 </div>
