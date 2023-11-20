@@ -19,9 +19,10 @@
 	let evaluated = null;
 
 	let camera = getContext('camera');
-	let current_style = "";
+	let current_style = "display:none;";
 
 	onMount(function () {
+		console.log("Props: " + JSON.stringify(Object.keys($$props), null, ' '));
 	});
 
 	$: if(BROWSER) {
@@ -36,11 +37,12 @@
             camera: $camera,
             camera_refs : [$camera.x, $camera.y, $camera.scale, $camera.w, $camera.h]
         };
-		if(!compare(to_check, params)) {
-			console.log('Evaluating coords');
-			params = to_check;
-			evaluated = evaluateCoords(to_check);
-		}
+		// if(!compare(to_check, params)) {
+		// 	console.log('Evaluating coords');
+		// 	params = to_check;
+		// 	evaluated = evaluateCoords(to_check);
+		// }
+		evaluated = evaluateCoords(to_check);
 
 		current_style = "position:absolute;top:0px;left:0px;transform:" + evaluated.transform + ";width:" + evaluated.tgt_width.toNumber() + "px;height:" + evaluated.tgt_height.toNumber() + "px;z-index:" + evaluated.depth.toNumber() + ";border:solid blue 1px;overflow:hidden;";
 
@@ -48,7 +50,7 @@
 </script>
 
 <div style={current_style}>
-	<pre>{JSON.stringify(evaluated, null, '  ')}</pre>
+	<!-- <pre>{JSON.stringify(evaluated, null, '  ')}</pre> -->
 	{#if debug}
 		<div
 			style="position:absolute;padding:5px;font-size:xx-small;bottom:-20px;right:1px;font-family:Courier;border:solid rgba(0,0,0,0.2) 1px;transform:translate(2%,70%);border-radius:3px;padding:11px;"

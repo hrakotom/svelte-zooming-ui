@@ -91,6 +91,8 @@ export function positionObserved(el, store) {
 
 export function evaluateCoords(params) {
 
+  console.log("Evaluating coords");
+
   if (!params || !params.camera) return { visible: false };
 
   let camera = params.camera;

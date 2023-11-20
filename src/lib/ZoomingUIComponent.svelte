@@ -13,6 +13,8 @@
 	let id = 'zui-' + uuid4();
 	let resizes = 0;
 
+	let previous_screen = null;
+
 	let screen = writable({
 		x: Decimal(0),
 		y: Decimal(0),
@@ -40,7 +42,7 @@
 	});
 
 	let screenResized = lodash.debounce(function(){
-		console.log("Camera reset after dims change");
+		console.log("Screen dims change, reset camera");
 
 		$camera.w 		= Decimal($screen.w);
 		$camera.h 		= Decimal($screen.h);
@@ -51,7 +53,11 @@
 
 	// Reactive camera setup
 	$: if(BROWSER) {
-		screenResized($screen);
+		let current_screen = JSON.stringify($screen);
+		if(current_screen != previous_screen){
+			previous_screen = current_screen;
+			screenResized();
+		}
 	}
 
 </script>
