@@ -14,7 +14,7 @@
 
 <div style="border:solid green 2px;width:25%;height:50%;transform:translate(-50%,-50%);top:50%;left:75%;position:absolute;">
     <ZUI on:zui-notification={handleZuiNotification} debug={true}>
-        <Positionable x={Decimal(100)} y={Decimal(100)} width={Decimal(50)} height={Decimal(50)} depth={Decimal(1)} debug={true}>
+        <Positionable x={Decimal(0)} y={Decimal(0)} width={Decimal(50)} height={Decimal(50)} depth={Decimal(1)} debug={true}>
             <div style="background-color: yellow;">Positionable Element</div>
         </Positionable>
     </ZUI>

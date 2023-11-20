@@ -26,7 +26,8 @@
 		z: Decimal(0),
 		scale: Decimal(1),
 		w: Decimal(10000),
-		h: Decimal(10000)
+		h: Decimal(10000),
+		fov: 0.0
 	});
 
 	setContext('screen', screen);
@@ -37,6 +38,21 @@
 
     onDestroy(() => {
 	});
+
+	let screenResized = lodash.debounce(function(){
+		console.log("Camera reset after dims change");
+
+		$camera.w 		= Decimal($screen.w);
+		$camera.h 		= Decimal($screen.h);
+		$camera.fov 	= Decimal((0.5 / Math.tan(Math.PI / 8)) * $screen.h);
+
+	}, 300);
+
+
+	// Reactive camera setup
+	$: if(BROWSER) {
+		screenResized($screen);
+	}
 
 </script>
 
