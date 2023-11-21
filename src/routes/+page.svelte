@@ -16,7 +16,7 @@
 <div style="border:solid green 2px;width:25%;height:50%;transform:translate(-50%,-50%);top:50%;left:75%;position:absolute;">
     <ZUI on:zui-notification={handleZuiNotification} debug={true}>
         <Positionable x={Decimal(0)} y={Decimal(0)} width={Decimal(50)} height={Decimal(50)} depth={Decimal(1)} debug={true}>
-            <div style="background-color: yellow;width:100%;height:100%;" in:fade>YEEEEELOOOOW</div>
+            <div style="background-color: yellow;width:100%;height:100%;">YEEEEELOOOOW</div>
         </Positionable>
         <Positionable x={Decimal(60)} y={Decimal(0)} width={Decimal(50)} height={Decimal(50)} depth={Decimal(1)} debug={true}>
             <div style="background-color: red;width:100%;height:100%;">Positionable Element</div>
@@ -33,10 +33,10 @@
 <div style="border:solid green 2px;width:25%;height:50%;transform:translate(-50%,-50%);top:50%;left:25%;position:absolute;">
     <ZUI on:zui-notification={handleZuiNotification} debug={true}>
         <Positionable x={Decimal(0)} y={Decimal(0)} width={Decimal(50)} height={Decimal(50)} depth={Decimal(1)} debug={true}>
-            <div style="background-color: yellow;width:100%;height:100%;" in:fade>Positionable Element</div>
+            <div style="background-color: yellow;width:100%;height:100%;">Positionable Element</div>
         </Positionable>
         <Positionable x={Decimal(60)} y={Decimal(60)} width={Decimal(50)} height={Decimal(50)} depth={Decimal(1)} debug={true}>
-            <div style="background-color: blue;width:100%;height:100%;">Positionable Element</div>
+            <div style="background-color: blue;width:100%;height:100%;" in:fade>Positionable Element</div>
         </Positionable>
     </ZUI>
 </div>
