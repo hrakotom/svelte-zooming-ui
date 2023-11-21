@@ -7,4 +7,8 @@ Specification: A zooming user interface that just works. Like you imagined it wo
 ## To-Do List
 
 - [x] create two basic components for the zui.
-- [ ] Each zui component has zooming capability.
+- [ ] Give Each zui component has zooming capability.
+    - [ ] create a lookAt function that takes a point and a zoom level.
+    - [ ] Handle drag events.
+    - [ ] Handle zoom events. ( finger and mouse wheel )
+
