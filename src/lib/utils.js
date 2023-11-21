@@ -2,7 +2,7 @@ import UUID from "pure-uuid";
 import { writable } from 'svelte/store';
 import Decimal from "decimal.js";
 import anime from "animejs";
-import {beforeUpdate} from 'svelte'
+import { beforeUpdate } from 'svelte'
 
 export function uuid4() {
   // Generates a version 4 UUID (random)
@@ -25,7 +25,7 @@ export function getBBox(x, y, width, height, offset) {
 
 // Returns true if two bounding boxes intersect
 export function intersectsBBox(r1, r2) {
-  
+
   return !(
     r2.left.gt(r1.right) ||
     r2.right.lt(r1.left) ||
@@ -41,7 +41,7 @@ export function positionObserved(el, store) {
 
   let dirty;
 
-  let updater = function(node) {
+  let updater = function (node) {
     //console.log("Handling update or set...");
     let rect = node.getBoundingClientRect();
     return {
@@ -50,29 +50,29 @@ export function positionObserved(el, store) {
       w: Decimal(rect.width),
       h: Decimal(rect.height)
     };
-	};
+  };
 
 
   beforeUpdate(() => {
-		if (dirty) store.set(updater(el))
-		dirty = false;
-	});
-	
-	if(ResizeObserver) {
-		const resizeObserver = new ResizeObserver(entries => {
-			for (let entry of entries) {
-				dirty = true;
-				//force before update to run;
-				store.set(updater(entry.target));
-			}
+    if (dirty) store.set(updater(el))
+    dirty = false;
+  });
+
+  if (ResizeObserver) {
+    const resizeObserver = new ResizeObserver(entries => {
+      for (let entry of entries) {
+        dirty = true;
+        //force before update to run;
+        store.set(updater(entry.target));
+      }
     });
-		
-	  resizeObserver.observe(el);
-		
-		return {
-			destroy() { resizeObserver.unobserve(el); }
-		}
-	}
+
+    resizeObserver.observe(el);
+
+    return {
+      destroy() { resizeObserver.unobserve(el); }
+    }
+  }
 }
 
 export function evaluateCoords(params) {
@@ -132,7 +132,7 @@ export function evaluateCoords(params) {
   let screen_width = width.times(camera.scale);
   let screen_height = height.times(camera.scale);
 
-  screen_width = width.times(camera.scale) ;
+  screen_width = width.times(camera.scale);
 
   return {
     tgt_width: tgt_width,

@@ -6,12 +6,13 @@
 	import Decimal from 'decimal.js';
 	import lodash from 'lodash';
 	import interact from 'interactjs';
-    import anime from "animejs";
-	
+	import anime from 'animejs';
+
+
 	export let debug = false;
 
 	let id = 'zui-' + uuid4();
-	let tween_camera= null;
+	let tween_camera = null;
 
 	let previous_screen = null;
 
@@ -31,6 +32,8 @@
 		h: Decimal(10000),
 		fov: Decimal(0.0)
 	});
+	let dispatch = createEventDispatcher();
+
 
 	setContext('screen', screen);
 	setContext('camera', camera);
@@ -38,35 +41,172 @@
 	setContext('lookAt', lookAt);
 
 	onMount(() => {
-		//screenResizedImmediate();
+		let holder = {};
+
+		// console.log("interacting with zui");
+		interact('#'+id)
+			.on('tap', function (e) {
+				var taps = 1;
+
+				if (holder['data-tapcancel']) {
+					clearTimeout(holder['data-tapcancel']);
+					holder['data-tapcount'] += 1;
+				} else {
+					holder['data-tapcount'] = 1;
+				}
+				holder['data-tapcancel'] = setTimeout(function () {
+					if (holder['data-taphold']) {
+						//notify("hold event, ignoring tap");
+					} else {
+						if (e.target.id == id) {
+							dispatch('background-tap', {
+								taps: holder['data-tapcount'],
+								source: id
+							});
+							// window.evt = e;
+						}
+					}
+
+					delete holder['data-tapcount'];
+					delete holder['data-tapcancel'];
+					delete holder['data-taphold'];
+				}, 200);
+			})
+			.on('hold', function (evt) {
+				holder['data-taphold'] = true;
+
+				if (evt.touches && evt.touches.length != 1) return;
+				if (
+					evt.originalEvent &&
+					evt.originalEvent.pointerType == 'mouse' &&
+					evt.originalEvent.button == 2
+				) {
+					console.log('Ignoring right click hold event: ' + evt.originalEvent.button);
+					return;
+				}
+
+				// window.evt = evt;
+
+				evt.stopPropagation();
+				evt.preventDefault();
+
+				// We'll see later if we need to do this
+				// if (world.ZOOMING || world.PANNING || $ui_store.app.devMode) return;
+
+				dispatch('background-hold', {
+					source: id,
+					// Might need other params
+				});
+			})
+			.on('up', function (evt) {
+				dispatch('background-hold-stop', {
+					source: id,
+					// Might need other params
+				});
+			})
+			.draggable({
+				inertia: true,
+				listeners: {
+					start: function (evt) {
+						evt.preventDefault();
+						evt.stopPropagation();
+					},
+					move: dragMoveListener
+				}
+			})
+			.on('draginertiastart', function (evt) {
+				//console.log("Heard drag inertia start: " + evt.speed);
+				if (evt.speed > 2000) {
+					// We consider this a swipe event
+					$screen._container_swipe = true;
+				} else {
+					$screen._container_swipe = false;
+				}
+			})
+			.on(
+				'onmousewheel' in document ? 'mousewheel' : 'wheel',
+				lodash.throttle(
+					function (evt) {
+						// console.log("Hearing mousewheel event: " + evt.deltaY + " (" + evt.deltaMode + ")");
+
+						if (evt.deltaY && Math.abs(evt.deltaY) < 1) return;
+
+						var factor = Math.pow(0.99, 2);
+						factor = Math.pow(0.6, 2);
+
+						var direction = evt.detail < 0 || evt.wheelDelta > 0 || evt.deltaY < 0 ? 1 : -1;
+
+						if (direction > 0) {
+							factor = 1 / factor;
+						} else if (direction < 0) {
+							factor = factor;
+						} else {
+							return;
+						}
+
+						var dx = Decimal(evt.clientX)
+								.minus($camera.w.dividedBy(2))
+								.times(factor - 1),
+							dy = Decimal(evt.clientY)
+								.minus($camera.h.dividedBy(2))
+								.times(factor - 1);
+
+						lookAt(
+							$camera.x.plus(
+								dx.dividedBy($camera.scale).dividedBy(factor)
+							),
+							$camera.y.minus(
+								dy.dividedBy($camera.scale).dividedBy(factor)
+							),
+							$camera.scale.times(factor),
+							800,
+							'linear'
+						);
+					},
+					200,
+					{ trailing: false }
+				)
+			)
+			.gesturable({
+				onmove: function (event) {
+
+					try {
+						$camera.scale = $camera.scale.times(1 + event.ds);
+
+						event.preventDefault();
+						event.stopPropagation();
+
+						dragMoveListener(event);
+					} catch (e) {
+						notify('Error while gesturing: ' + e, 'error');
+					}
+				}
+			})
+			.styleCursor(false);
 	});
 
-    onDestroy(() => {
-	});
+	onDestroy(() => {});
 
-	let screenResized = lodash.debounce(function(){
-		console.log("Screen dims change, reset camera");
+	let screenResized = lodash.debounce(function () {
+		console.log('Screen dims change, reset camera');
 
-		$camera.w 		= Decimal($screen.w);
-		$camera.h 		= Decimal($screen.h);
-		$camera.fov 	= Decimal((0.5 / Math.tan(Math.PI / 8)) * $screen.h);
-
+		$camera.w = Decimal($screen.w);
+		$camera.h = Decimal($screen.h);
+		$camera.fov = Decimal((0.5 / Math.tan(Math.PI / 8)) * $screen.h);
 	}, 500);
 
-	let screenResizedImmediate = function(){
-		console.log("Screen dims change, reset camera (immediate)");
+	let screenResizedImmediate = function () {
+		console.log('Screen dims change, reset camera (immediate)');
 
-		$camera.w 		= Decimal($screen.w);
-		$camera.h 		= Decimal($screen.h);
-		$camera.fov 	= Decimal((0.5 / Math.tan(Math.PI / 8)) * $screen.h);
-
-	}
-
+		$camera.w = Decimal($screen.w);
+		$camera.h = Decimal($screen.h);
+		$camera.fov = Decimal((0.5 / Math.tan(Math.PI / 8)) * $screen.h);
+	};
 
 	// Reactive camera setup
-	$: if(BROWSER) {
+	$: if (BROWSER) {
 		let current_screen = JSON.stringify($screen);
-		if(current_screen != previous_screen){
+		if (current_screen != previous_screen) {
 			// console.log("Screen dims changed : " + JSON.stringify($screen, null, ' '));
 			screenResized();
 			previous_screen = current_screen;
@@ -74,14 +214,13 @@
 	}
 
 	function lookAt(x, y, scale, duration, easing) {
-
-		console.log(id + ": Camera is moving: " + JSON.stringify([x,y,scale], null, ' '));
+		console.log(id + ': Camera is moving: ' + JSON.stringify([x, y, scale], null, ' '));
 
 		var param = null;
-		if(duration === null || duration === undefined) duration = 300;
-		if(easing === null || easing === undefined) easing = 'easeInOutCubic';
+		if (duration === null || duration === undefined) duration = 300;
+		if (easing === null || easing === undefined) easing = 'easeInOutCubic';
 
-		if (typeof(x) == "object" && !(x instanceof Decimal)) {
+		if (typeof x == 'object' && !(x instanceof Decimal)) {
 			param = x;
 		} else {
 			param = {
@@ -91,19 +230,18 @@
 			};
 		}
 
-		["x", "y", "scale"].forEach(function(item){
-			if(!(param[item] instanceof Decimal))
-				param[item] = Decimal(param[item]);
+		['x', 'y', 'scale'].forEach(function (item) {
+			if (!(param[item] instanceof Decimal)) param[item] = Decimal(param[item]);
 			// $ui_store.world._tgt_camera[item] = param[item];
 		});
 
-		if(tween_camera) {
+		if (tween_camera) {
 			tween_camera.pause();
 			tween_camera = null;
 		}
 
 		// Calculate current z
-		if($camera.fov === undefined) {
+		if ($camera.fov === undefined) {
 			$camera.fov = Decimal((0.5 / Math.tan(Math.PI / 8)) * $camera.h);
 		}
 		$camera.z = $camera.fov.dividedBy($camera.scale);
@@ -126,20 +264,36 @@
 			easing: easing,
 			duration: duration,
 			update: function (anim) {
-				$camera.x     = initial.x.plus(dx.times(o.value));
-				$camera.y     = initial.y.plus(dy.times(o.value));
-				$camera.z     = initial.z.plus(dz.times(o.value));
-				if($camera.fov === undefined) {
-					$camera.fov = Decimal((0.5 / Math.tan(Math.PI / 8)) * $camera.h);	
+				$camera.x = initial.x.plus(dx.times(o.value));
+				$camera.y = initial.y.plus(dy.times(o.value));
+				$camera.z = initial.z.plus(dz.times(o.value));
+				if ($camera.fov === undefined) {
+					$camera.fov = Decimal((0.5 / Math.tan(Math.PI / 8)) * $camera.h);
 				}
 				$camera.scale = $camera.fov.dividedBy($camera.z);
 			},
-			complete: function(anim){
+			complete: function (anim) {
 				tween_camera = null;
-				console.log(id + ": Camera has finished moving");
+				console.log(id + ': Camera has finished moving');
 			}
 		});
+	}
 
+	function dragMoveListener(event) {
+		if(tween_camera) {
+			tween_camera.pause();
+			tween_camera = null;
+		}
+
+
+		$camera.x = $camera.x.minus(Decimal(event.dx).dividedBy($camera.scale));
+		$camera.y = $camera.y.plus(Decimal(event.dy).dividedBy($camera.scale));
+
+		event.stopPropagation();
+		event.preventDefault();
+
+		// message = "Moving: " + [event.dx, event.dy, event.ds];
+		// world.setPanning();
 	}
 
 </script>
@@ -147,9 +301,9 @@
 <div
 	{id}
 	style="position:absolute;box-sizing:border-box;border:solid red 1px;width:100%;height:100%;top:0px;left:0px;overflow:hidden;"
-		use:positionObserved={screen}
-	>
-		<!-- debug: {debug} -->
+	use:positionObserved={screen}
+>
+	<!-- debug: {debug} -->
 	<slot />
 	<!-- {#if debug}
 		<div
