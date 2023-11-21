@@ -145,9 +145,11 @@
 						}
 
 						var dx = Decimal(evt.clientX)
+								.minus($screen.x)
 								.minus($camera.w.dividedBy(2))
 								.times(factor - 1),
 							dy = Decimal(evt.clientY)
+								.minus($screen.y)
 								.minus($camera.h.dividedBy(2))
 								.times(factor - 1);
 
