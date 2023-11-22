@@ -17,28 +17,28 @@
 </script>
 
 <div style="border:solid green 2px;width:25%;height:50%;transform:translate(-50%,-50%);top:50%;left:75%;position:absolute;">
-    <ZUI on:zui-notification={handleZuiNotification} debug={true}>
-        <Positionable x={Decimal(0)} y={Decimal(0)} width={Decimal(50)} height={Decimal(50)} depth={Decimal(1)} debug={true}>
-            <div style="background-color: yellow;width:100%;height:100%;">NOOOT CLICKABLE !</div>
+    <ZUI on:zui-notification={handleZuiNotification} debug={false}>
+        <Positionable x={Decimal(0)} y={Decimal(0)} width={Decimal(50)} height={Decimal(50)} depth={Decimal(1)} debug={false}>
+            <div style="background-color: yellow;width:100%;height:100%;font-weight:900;font-size:31px;display:flex;justify-content: center;padding-top:21px;">NOOOT CLICKABLE !</div>
         </Positionable>
         <Positionable x={Decimal(60)} y={Decimal(0)} width={Decimal(50)} height={Decimal(50)} depth={Decimal(1)} debug={true}>
             <Clickable bgcolor="red">Positionable Element</Clickable>
         </Positionable>
-        <Positionable x={Decimal(60)} y={Decimal(60)} width={Decimal(50)} height={Decimal(50)} depth={Decimal(1)} debug={true}>
+        <Positionable x={Decimal(60)} y={Decimal(60)} width={Decimal(50)} height={Decimal(50)} depth={Decimal(1)} debug={false}>
             <Clickable bgcolor="blue">Positionable Element</Clickable>
         </Positionable>
-        <Positionable x={Decimal(0)} y={Decimal(60)} width={Decimal(50)} height={Decimal(50)} depth={Decimal(1)} debug={true}>
+        <Positionable x={Decimal(0)} y={Decimal(60)} width={Decimal(50)} height={Decimal(50)} depth={Decimal(1)} debug={false}>
             <Clickable bgcolor="green">Positionable Element</Clickable>
         </Positionable>
     </ZUI>
 </div>
 
 <div style="border:solid green 2px;width:25%;height:50%;transform:translate(-50%,-50%);top:50%;left:25%;position:absolute;">
-    <ZUI on:zui-notification={handleZuiNotification} debug={true}>
-        <Positionable x={Decimal(0)} y={Decimal(0)} width={Decimal(50)} height={Decimal(50)} depth={Decimal(1)} debug={true}>
+    <ZUI on:zui-notification={handleZuiNotification} debug={false}>
+        <Positionable x={Decimal(0)} y={Decimal(0)} width={Decimal(50)} height={Decimal(50)} depth={Decimal(1)} debug={false}>
             <Clickable bgcolor="yellow">Positionable Element</Clickable>
         </Positionable>
-        <Positionable x={Decimal(60)} y={Decimal(60)} width={Decimal(50)} height={Decimal(50)} depth={Decimal(1)} debug={true}>
+        <Positionable x={Decimal(60)} y={Decimal(60)} width={Decimal(50)} height={Decimal(50)} depth={Decimal(1)} debug={false}>
             <Clickable bgcolor="blue">Positionable Element</Clickable>
         </Positionable>
     </ZUI>
