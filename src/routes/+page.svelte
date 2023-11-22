@@ -40,3 +40,8 @@
         </Positionable>
     </ZUI>
 </div>
+<style>
+    body {                                                                                                                                                                                  
+         overscroll-behavior: none;                                                                                                                                                          
+    }    
+</style>
