@@ -1,4 +1,11 @@
 <script>
+    // Add the viewport meta tag to prevent zooming on iOS
+    if (typeof document !== 'undefined') {
+        const viewportMeta = document.createElement('meta');
+        viewportMeta.name = 'viewport';
+        viewportMeta.content = 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no';
+        document.getElementsByTagName('head')[0].appendChild(viewportMeta);
+    }
     import { BROWSER } from 'esm-env';
     import ZUI from '$lib/ZoomingUIComponent.svelte';
     import Positionable from '$lib/Positionable.svelte';
