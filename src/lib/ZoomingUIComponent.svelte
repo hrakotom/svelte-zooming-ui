@@ -229,7 +229,7 @@
 	}
 
 	function lookAt(x, y, scale, duration, easing) {
-		console.log(id + ': Camera is moving: ' + JSON.stringify([x, y, scale], null, ' '));
+		// console.log(id + ': Camera is moving: ' + JSON.stringify([x, y, scale], null, ' '));
 
 		var param = null;
 		if (duration === null || duration === undefined) duration = 300;
@@ -289,7 +289,7 @@
 			},
 			complete: function (anim) {
 				tween_camera = null;
-				console.log(id + ': Camera has finished moving');
+				// console.log(id + ': Camera has finished moving');
 			}
 		});
 	}
