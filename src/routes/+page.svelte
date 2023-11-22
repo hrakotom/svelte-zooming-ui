@@ -3,6 +3,7 @@
     import ZUI from '$lib/ZoomingUIComponent.svelte';
     import Positionable from '$lib/Positionable.svelte';
     import Clickable from '$lib/Clickable.svelte';
+    import Embedded from '$lib/Embedded.svelte';
     import Decimal from 'decimal.js';
     import { fade } from 'svelte/transition';
     import { onMount } from 'svelte';
@@ -40,6 +41,9 @@
         </Positionable>
         <Positionable x={Decimal(60)} y={Decimal(60)} width={Decimal(50)} height={Decimal(50)} depth={Decimal(1)} debug={false}>
             <Clickable bgcolor="blue">Positionable Element</Clickable>
+        </Positionable>
+        <Positionable x={Decimal(60)} y={Decimal(0)} width={Decimal(50)} height={Decimal(50)} depth={Decimal(1)} debug={true}>
+            <Embedded slot="positionable"/>
         </Positionable>
     </ZUI>
 </div>

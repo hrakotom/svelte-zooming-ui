@@ -75,7 +75,7 @@
 {#if evaluated && evaluated.visible}
 	<div style={current_style}>
 		{#if debug}
-			<pre>{JSON.stringify($frame, null, ' ')}</pre>
+			<pre style="position:absolute;color:black;pointer-events:none;">{JSON.stringify($frame, null, ' ')}</pre>
 		{/if}
 		<!-- <pre>{JSON.stringify(evaluated, null, '  ')}</pre> -->
 		<!-- {#if debug}
@@ -87,4 +87,5 @@
 		{/if} -->
 		<slot />
 	</div>
+	<slot name="positionable" />
 {/if}
