@@ -8,7 +8,6 @@
 	import interact from 'interactjs';
 	import anime from 'animejs';
 
-
 	export let debug = false;
 
 	let id = 'zui-' + uuid4();
@@ -34,17 +33,36 @@
 	});
 	let dispatch = createEventDispatcher();
 
-
 	setContext('screen', screen);
 	setContext('camera', camera);
 	setContext('zui', id);
 	setContext('lookAt', lookAt);
+	setContext('focusOn', focusOn);
+
+	function focusOn(x, y, w, h, duration, easing, ratio) {
+		var tgt_scale = 1;
+		if (duration === null || duration === void 0) duration = 500;
+		if (easing === null || easing === void 0) easing = 'easeInOutCubic';
+
+		var scale = ratio || 0.8;
+		scale = Decimal(scale);
+
+		var wratio = $camera.h.dividedBy($camera.w);
+		var oratio = h.dividedBy(w);
+
+		if (wratio.gte(oratio)) {
+			tgt_scale = scale.div(w).div(wratio).times($camera.h);
+		} else {
+			tgt_scale = scale.dividedBy(h).times($camera.h);
+		}
+		lookAt(x, y, tgt_scale, duration, easing);
+	}
 
 	onMount(() => {
 		let holder = {};
 
 		// console.log("interacting with zui");
-		interact('#'+id)
+		interact('#' + id)
 			.on('tap', function (e) {
 				var taps = 1;
 
@@ -94,13 +112,13 @@
 				// if (world.ZOOMING || world.PANNING || $ui_store.app.devMode) return;
 
 				dispatch('background-hold', {
-					source: id,
+					source: id
 					// Might need other params
 				});
 			})
 			.on('up', function (evt) {
 				dispatch('background-hold-stop', {
-					source: id,
+					source: id
 					// Might need other params
 				});
 			})
@@ -154,12 +172,8 @@
 								.times(factor - 1);
 
 						lookAt(
-							$camera.x.plus(
-								dx.dividedBy($camera.scale).dividedBy(factor)
-							),
-							$camera.y.minus(
-								dy.dividedBy($camera.scale).dividedBy(factor)
-							),
+							$camera.x.plus(dx.dividedBy($camera.scale).dividedBy(factor)),
+							$camera.y.minus(dy.dividedBy($camera.scale).dividedBy(factor)),
 							$camera.scale.times(factor),
 							800,
 							'linear'
@@ -171,7 +185,6 @@
 			)
 			.gesturable({
 				onmove: function (event) {
-
 					try {
 						$camera.scale = $camera.scale.times(1 + event.ds);
 
@@ -282,11 +295,10 @@
 	}
 
 	function dragMoveListener(event) {
-		if(tween_camera) {
+		if (tween_camera) {
 			tween_camera.pause();
 			tween_camera = null;
 		}
-
 
 		$camera.x = $camera.x.minus(Decimal(event.dx).dividedBy($camera.scale));
 		$camera.y = $camera.y.plus(Decimal(event.dy).dividedBy($camera.scale));
@@ -297,7 +309,6 @@
 		// message = "Moving: " + [event.dx, event.dy, event.ds];
 		// world.setPanning();
 	}
-
 </script>
 
 <div
