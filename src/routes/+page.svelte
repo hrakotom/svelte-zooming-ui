@@ -9,13 +9,31 @@
     import { onMount } from 'svelte';
 
     let verbose = true;
+    let menu = {
+        "Simple stuff" : {
+            "event" : "simple-stuff",
+            "selected" : true,
+        },
+        "Full screen and LOD" : {
+            "event" : "full-screen-and-lod",
+            "selected" : false,
+        },
+    };
 
     function handleZuiNotification(event) {
         console.log("ZUI notification: " + event.detail);
     }
 
 
+
+
+
 </script>
+
+<div style="position:absolute;padding:11px;border solid rgba(0,0,0,0.5) 1px;box-sizing:border-box;">
+
+</div>
+
 
 <div style="border:solid green 2px;width:25%;height:50%;transform:translate(-50%,-50%);top:50%;left:75%;position:absolute;">
     <ZUI on:zui-notification={handleZuiNotification} debug={false}>
