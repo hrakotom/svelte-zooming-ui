@@ -6,16 +6,18 @@
     import Embedded from '$lib/Embedded.svelte';
     import Decimal from 'decimal.js';
     import { fade } from 'svelte/transition';
-    import { onMount } from 'svelte';
+    import { onMount, createEventDispatcher } from 'svelte';
 
+    let dispatch = createEventDispatcher();
     let verbose = true;
+
     let menu = {
         "Simple stuff" : {
-            "event" : "simple-stuff",
+            "type" : "simple-stuff",
             "selected" : true,
         },
         "Full screen and LOD" : {
-            "event" : "full-screen-and-lod",
+            "type" : "full-screen-and-lod",
             "selected" : false,
         },
     };
@@ -24,15 +26,17 @@
         console.log("ZUI notification: " + event.detail);
     }
 
-
+    function handleMenuChoice(event) {
+        console.log("Menu notification: " + event);
+    }
 
 
 
 </script>
 
-<div style="position:absolute;padding:11px;border solid rgba(0,0,0,0.5) 1px;box-sizing:border-box;">
+<div style="position:absolute;padding:11px;border solid rgba(0,0,0,0.5) 1px;box-sizing:border-box;" on:menu-selection:handleMenuChoice>
     {#each Object.entries(menu) as [name, details]}
-        <div on:click={() => dispatch(details.event)} style="cursor: pointer;">
+        <div on:click={() => dispatch("menu-selection", {"type":details.type})} style="cursor: pointer;">
             {name}
         </div>
     {/each}
