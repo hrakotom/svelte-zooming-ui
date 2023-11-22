@@ -29,7 +29,8 @@
 		$frame.x = x;
 		$frame.y = y;
 		$frame.width = width;
-		$frame.height = height;		
+		$frame.height = height;
+		$frame.depth = depth;
 	}
 
 	onMount(function () {
