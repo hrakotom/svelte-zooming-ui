@@ -48,7 +48,7 @@
     {/each}
 </div>
 
-{#if menu}
+{#if menu['basic-stuff'].selected}
     <div style="border:solid green 2px;width:25%;height:50%;transform:translate(-50%,-50%);top:50%;left:75%;position:absolute;">
         <ZUI on:zui-notification={handleZuiNotification} debug={false}>
             <Positionable x={Decimal(0)} y={Decimal(0)} width={Decimal(50)} height={Decimal(50)} depth={Decimal(1)} debug={false}>
