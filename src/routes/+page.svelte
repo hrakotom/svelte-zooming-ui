@@ -1,16 +1,11 @@
 <script>
-    // Add the viewport meta tag to prevent zooming on iOS
-    if (typeof document !== 'undefined') {
-        const viewportMeta = document.createElement('meta');
-        viewportMeta.name = 'viewport';
-        viewportMeta.content = 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no';
-        document.getElementsByTagName('head')[0].appendChild(viewportMeta);
-    }
     import { BROWSER } from 'esm-env';
     import ZUI from '$lib/ZoomingUIComponent.svelte';
     import Positionable from '$lib/Positionable.svelte';
+    import Clickable from '$lib/Clickable.svelte';
     import Decimal from 'decimal.js';
     import { fade } from 'svelte/transition';
+    import { onMount } from 'svelte';
 
     let verbose = true;
 
@@ -18,21 +13,22 @@
         console.log("ZUI notification: " + event.detail);
     }
 
+
 </script>
 
 <div style="border:solid green 2px;width:25%;height:50%;transform:translate(-50%,-50%);top:50%;left:75%;position:absolute;">
     <ZUI on:zui-notification={handleZuiNotification} debug={true}>
         <Positionable x={Decimal(0)} y={Decimal(0)} width={Decimal(50)} height={Decimal(50)} depth={Decimal(1)} debug={true}>
-            <div style="background-color: yellow;width:100%;height:100%;">YEEEEELOOOOW</div>
+            <div style="background-color: yellow;width:100%;height:100%;">NOOOT CLICKABLE !</div>
         </Positionable>
         <Positionable x={Decimal(60)} y={Decimal(0)} width={Decimal(50)} height={Decimal(50)} depth={Decimal(1)} debug={true}>
-            <div style="background-color: red;width:100%;height:100%;">Positionable Element</div>
+            <Clickable bgcolor="red">Positionable Element</Clickable>
         </Positionable>
         <Positionable x={Decimal(60)} y={Decimal(60)} width={Decimal(50)} height={Decimal(50)} depth={Decimal(1)} debug={true}>
-            <div style="background-color: blue;width:100%;height:100%;">Positionable Element</div>
+            <Clickable bgcolor="blue">Positionable Element</Clickable>
         </Positionable>
         <Positionable x={Decimal(0)} y={Decimal(60)} width={Decimal(50)} height={Decimal(50)} depth={Decimal(1)} debug={true}>
-            <div style="background-color: green;width:100%;height:100%;">Positionable Element</div>
+            <Clickable bgcolor="green">Positionable Element</Clickable>
         </Positionable>
     </ZUI>
 </div>
@@ -40,15 +36,10 @@
 <div style="border:solid green 2px;width:25%;height:50%;transform:translate(-50%,-50%);top:50%;left:25%;position:absolute;">
     <ZUI on:zui-notification={handleZuiNotification} debug={true}>
         <Positionable x={Decimal(0)} y={Decimal(0)} width={Decimal(50)} height={Decimal(50)} depth={Decimal(1)} debug={true}>
-            <div style="background-color: yellow;width:100%;height:100%;">Positionable Element</div>
+            <Clickable bgcolor="yellow">Positionable Element</Clickable>
         </Positionable>
         <Positionable x={Decimal(60)} y={Decimal(60)} width={Decimal(50)} height={Decimal(50)} depth={Decimal(1)} debug={true}>
-            <div style="background-color: blue;width:100%;height:100%;" in:fade>Positionable Element</div>
+            <Clickable bgcolor="blue">Positionable Element</Clickable>
         </Positionable>
     </ZUI>
 </div>
-<style>
-    body {                                                                                                                                                                                  
-         overscroll-behavior: none;                                                                                                                                                          
-    }    
-</style>

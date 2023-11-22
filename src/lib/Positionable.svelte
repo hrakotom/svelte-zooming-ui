@@ -23,6 +23,7 @@
 	let current_style = "display:none;will-change:transform;";
 
 	let frame = writable({});
+	setContext('frame', frame);
 
 	$: if (BROWSER) {
 		$frame.x = x;
@@ -67,16 +68,9 @@
 
 	}
 
-	function clicked(){
-		console.log("Clicked");
-		let scale = Math.round(Math.random() * 10);
-		if (scale == 0) scale = 1;
-		lookAt($frame.x,$frame.y,scale,300);
-	}
-	
 </script>
 {#if evaluated && evaluated.visible}
-	<div style={current_style} on:click={clicked}>
+	<div style={current_style}>
 		<pre>{JSON.stringify($frame, null, ' ')}</pre>
 		<!-- <pre>{JSON.stringify(evaluated, null, '  ')}</pre> -->
 		<!-- {#if debug}
