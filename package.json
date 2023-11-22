@@ -52,6 +52,7 @@
 	"types": "./dist/index.d.ts",
 	"type": "module",
 	"dependencies": {
-		"just-compare": "^2.3.0"
+		"just-compare": "^2.3.0",
+		"pure-uuid": "^1.8.1"
 	}
 }
