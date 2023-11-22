@@ -36,7 +36,7 @@
 
 <div style="position:absolute;padding:11px;border solid rgba(0,0,0,0.5) 1px;box-sizing:border-box;" on:menu-selection={handleMenuChoice}>
     {#each Object.entries(menu) as [name, details]}
-        <div on:click={() => dispatch('menu-selection', details.type)} style="cursor: pointer;">
+        <div on:click={() => dispatch('menu-selection', { detail: details.type })} style="cursor: pointer;">
             {name}
         </div>
     {/each}
