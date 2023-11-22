@@ -31,7 +31,11 @@
 </script>
 
 <div style="position:absolute;padding:11px;border solid rgba(0,0,0,0.5) 1px;box-sizing:border-box;">
-
+    {#each Object.entries(menu) as [name, details]}
+        <div on:click={() => dispatch(details.event)} style="cursor: pointer;">
+            {name}
+        </div>
+    {/each}
 </div>
 
 
