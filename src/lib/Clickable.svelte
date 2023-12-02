@@ -1,6 +1,5 @@
 <script>
     import { getContext } from "svelte";
-    import { fade } from 'svelte/transition';
 
     export let bgcolor = "red";
 
@@ -15,6 +14,6 @@
 </script>
 
 
-<div style="width:100%;height:100%;background-color:{bgcolor};cursor:pointer;border:solid rgba(0,0,0,1) 0px;box-sizing:border-box;" on:click={clicked} in:fade>
+<div style="width:100%;height:100%;background-color:{bgcolor};cursor:pointer;border:solid rgba(0,0,0,1) 0px;box-sizing:border-box;" on:click={clicked}>
     <slot></slot>
 </div>

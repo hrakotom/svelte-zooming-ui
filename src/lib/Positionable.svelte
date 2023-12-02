@@ -1,6 +1,5 @@
 <script>
 	import { onMount, onDestroy, getContext, setContext } from 'svelte';
-	import { fade } from 'svelte/transition';
 	import { BROWSER } from 'esm-env';
 	import Decimal from 'decimal.js';
 	import { evaluateCoords } from '$lib/utils.js';
