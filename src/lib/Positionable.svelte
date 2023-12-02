@@ -56,9 +56,12 @@
 			// console.log("Got: " + JSON.stringify(evaluated, null, ' '));
 			if(evaluated.visible) {
 				let factor = evaluated.screen_width.div(evaluated.tgt_width);
+				let width_ratio = evaluated.tgt_width.div($camera.w);
+				let height_ratio = evaluated.tgt_height.div($camera.h);
+				let size_ratio = Decimal.max(width_ratio, height_ratio);
 				// console.log("Factor: " + factor);
 				// console.log([reference_width, evaluated.tgt_width.toNumber()]);
-				$frame = {...to_check, factor: factor};
+				$frame = {...to_check, factor: factor, size_ratio: size_ratio};
 				current_style = "position:absolute;top:0px;left:0px;overflow:hidden;will-change:transform;box-sizing:border-box;transform:" + evaluated.transform + ";width:" + evaluated.tgt_width.toNumber() + "px;height:" + evaluated.tgt_height.toNumber() + "px;z-index:" + evaluated.depth.toNumber() ;
 				if(debug) {
 					current_style += ";border:dashed rgba(0,0,0,0.4) "+(2/factor)+"px;";
