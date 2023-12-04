@@ -9,7 +9,23 @@
 	import anime from 'animejs';
 
 	export let debug = false;
-	let elements = 0;
+
+	let containerElement;                                                                                                                                                                                       
+     let totalElementCount = 0;                                                                                                                                                                                  
+                                                                                                                                                                                                                 
+	// Function to recursively count all child elements                                                                                                                                                         
+	function countAllChildElements(element) {                                                                                                                                                                   
+		let count = element.children.length;                                                                                                                                                                    
+		for (let child of element.children) {                                                                                                                                                                   
+			count += countAllChildElements(child);                                                                                                                                                              
+		}                                                                                                                                                                                                       
+		return count;                                                                                                                                                                                           
+	}                                                                                                                                                                                                           
+                                                                                                                                                                                                                 
+	// Reactive statement to count all child elements                                                                                                                                                           
+	$: if (BROWSER && containerElement) {                                                                                                                                                                                  
+		totalElementCount = countAllChildElements(containerElement);                                                                                                                                            
+	}                                                                                                                                                                                                           
 
 	let id = 'zui-' + uuid4();
 	let tween_camera = null;
@@ -316,6 +332,7 @@
 	{id}
 	style="position:absolute;box-sizing:border-box;border:solid red 0px;width:100%;height:100%;top:0px;left:0px;overflow:hidden;"
 	use:positionObserved={screen}
+	bind:this={containerElement}
 >
 	<!-- debug: {debug} -->
 	<slot />
@@ -325,6 +342,6 @@
 	style="position:absolute;padding:5px;font-size:xx-small;bottom:5px;right:5px;font-family:Courier;border:solid rgba(0,0,0,0.2) 1px;border-radius:3px;padding:11px;box-suzing:border-box;background-color:rgba(255,255,255,0.8);z-index:1000;"
 >
 	x: {Math.round($screen.x)}, y: {Math.round($screen.y)}<br/>{Math.round($screen.w)} x {Math.round($screen.h)}
-	<br>Elements: 
+	<br>Elements: {totalElementCount}
 </div>
 {/if}
