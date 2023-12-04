@@ -9,6 +9,7 @@
 	import anime from 'animejs';
 
 	export let debug = false;
+	let elements = 0;
 
 	let id = 'zui-' + uuid4();
 	let tween_camera = null;
@@ -32,12 +33,6 @@
 		fov: Decimal(0.0)
 	});
 	let dispatch = createEventDispatcher();
-
-	setContext('screen', screen);
-	setContext('camera', camera);
-	setContext('zui', id);
-	setContext('lookAt', lookAt);
-	setContext('focusOn', focusOn);
 
 	function focusOn(x, y, w, h, duration, easing, ratio) {
 		var tgt_scale = 1;
@@ -208,7 +203,7 @@
 		$camera.w = Decimal($screen.w);
 		$camera.h = Decimal($screen.h);
 		$camera.fov = Decimal((0.5 / Math.tan(Math.PI / 8)) * $screen.h);
-	}, 500);
+	}, 0);
 
 	let screenResizedImmediate = function () {
 		console.log('Screen dims change, reset camera (immediate)');
@@ -228,7 +223,7 @@
 		}
 	}
 
-	function lookAt(x, y, scale, duration, easing) {
+	export const lookAt = function (x, y, scale, duration, easing) {
 		// console.log(id + ': Camera is moving: ' + JSON.stringify([x, y, scale], null, ' '));
 
 		var param = null;
@@ -292,7 +287,7 @@
 				// console.log(id + ': Camera has finished moving');
 			}
 		});
-	}
+	};
 
 	function dragMoveListener(event) {
 		if (tween_camera) {
@@ -309,20 +304,27 @@
 		// message = "Moving: " + [event.dx, event.dy, event.ds];
 		// world.setPanning();
 	}
+
+	setContext('screen', screen);
+	setContext('camera', camera);
+	setContext('zui', id);
+	setContext('lookAt', lookAt);
+	setContext('focusOn', focusOn);
 </script>
 
 <div
 	{id}
-	style="position:absolute;box-sizing:border-box;border:solid red 1px;width:100%;height:100%;top:0px;left:0px;overflow:hidden;"
+	style="position:absolute;box-sizing:border-box;border:solid red 0px;width:100%;height:100%;top:0px;left:0px;overflow:hidden;"
 	use:positionObserved={screen}
 >
 	<!-- debug: {debug} -->
 	<slot />
-	<!-- {#if debug}
-		<div
-			style="position:absolute;padding:5px;font-size:xx-small;bottom:-20px;right:1px;font-family:Courier;border:solid rgba(0,0,0,0.2) 1px;transform:translate(2%,70%);border-radius:3px;padding:11px;"
-		>
-			x: {Math.round($screen.x)}, y: {Math.round($screen.y)}<br/>{Math.round($screen.w)} x {Math.round($screen.h)}
-		</div>
-	{/if} -->
 </div>
+{#if debug}
+<div
+	style="position:absolute;padding:5px;font-size:xx-small;bottom:5px;right:5px;font-family:Courier;border:solid rgba(0,0,0,0.2) 1px;border-radius:3px;padding:11px;box-suzing:border-box;background-color:rgba(255,255,255,0.8);z-index:1000;"
+>
+	x: {Math.round($screen.x)}, y: {Math.round($screen.y)}<br/>{Math.round($screen.w)} x {Math.round($screen.h)}
+	<br>Elements: 
+</div>
+{/if}
