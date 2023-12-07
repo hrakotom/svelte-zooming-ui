@@ -1,6 +1,7 @@
 <script>
 	/**
 	 * LOD (Level of Detail) component that reacts to clicks by focusing on its frame.
+	 * It displays or hides different items depending on the zoom level of the component.
 	 * @component
 	 */
 	import { getContext } from 'svelte';
