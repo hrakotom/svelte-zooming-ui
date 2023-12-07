@@ -4,8 +4,11 @@ import Decimal from "decimal.js";
 import anime from "animejs";
 import { beforeUpdate } from 'svelte'
 
+/**
+ * Generates a version 4 UUID (random).
+ * @returns {string} A random UUID string.
+ */
 export function uuid4() {
-  // Generates a version 4 UUID (random)
   return new UUID(4);
 }
 

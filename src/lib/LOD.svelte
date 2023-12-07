@@ -1,15 +1,24 @@
 <script>
+	/**
+	 * LOD (Level of Detail) component that reacts to clicks by focusing on its frame.
+	 * @component
+	 */
 	import { getContext } from 'svelte';
 	import { fade } from 'svelte/transition';
 	import Positionable from './Positionable.svelte';
 	import LOD from './LOD.svelte';
 	import Decimal from 'decimal.js';
 
+	/** @type {function} Focus method obtained from context to handle click action. */
 	let focus = getContext('focusOn');
+	/** @type {object} Frame object obtained from context representing the component's frame. */
 	let frame = getContext('frame');
 
+	/**
+	 * Handles click events on the component.
+	 * @param {MouseEvent} evt - The mouse event object.
+	 */
 	function clicked(evt) {
-		//console.log("Clicked: " + JSON.stringify($frame));
 		focus($frame.x, $frame.y, $frame.width, $frame.height);
 	}
 </script>
