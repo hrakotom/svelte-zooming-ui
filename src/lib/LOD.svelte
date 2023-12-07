@@ -20,6 +20,7 @@
 	/**
 	 * Handles click events on the component.
 	 * @param {MouseEvent} evt - The mouse event object.
+	 * @fires focus - Invokes the focus function with the frame's coordinates and dimensions.
 	 */
 	function clicked(evt) {
 		focus($frame.x, $frame.y, $frame.width, $frame.height);
