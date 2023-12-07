@@ -7,25 +7,28 @@
 	import lodash from 'lodash';
 	import interact from 'interactjs';
 	import anime from 'animejs';
+	import compare from 'just-compare';
 
 	export let debug = false;
 
-	let containerElement;                                                                                                                                                                                       
-     let totalElementCount = 0;                                                                                                                                                                                  
-                                                                                                                                                                                                                 
-	// Function to recursively count all child elements                                                                                                                                                         
-	function countAllChildElements(element) {                                                                                                                                                                   
-		let count = element.children.length;                                                                                                                                                                    
-		for (let child of element.children) {                                                                                                                                                                   
-			count += countAllChildElements(child);                                                                                                                                                              
-		}                                                                                                                                                                                                       
-		return count;                                                                                                                                                                                           
-	}                                                                                                                                                                                                           
-                                                                                                                                                                                                                 
-	// Reactive statement to count all child elements                                                                                                                                                           
-	$: if (BROWSER && containerElement) {                                                                                                                                                                                  
-		totalElementCount = countAllChildElements(containerElement);                                                                                                                                            
-	}                                                                                                                                                                                                           
+	let containerElement;
+	let totalElementCount = 0;
+	let previous_to_check = null;
+
+	// Function to recursively count all child elements
+	function countAllChildElements(element) {
+		let count = element.children.length;
+		for (let child of element.children) {
+			count += countAllChildElements(child);
+		}
+		return count;
+	}
+
+	let debouncedCountAllChildElements = lodash.debounce(function () {
+		if(!containerElement) return;
+		console.log('Counting the suckers');
+		totalElementCount = countAllChildElements(containerElement);
+	}, 1500);
 
 	let id = 'zui-' + uuid4();
 	let tween_camera = null;
@@ -49,6 +52,30 @@
 		fov: Decimal(0.0)
 	});
 	let dispatch = createEventDispatcher();
+
+	// Reactive statement to count all child elements
+	$: if (BROWSER && containerElement) {
+		totalElementCount = countAllChildElements(containerElement);
+
+		let to_check = {
+			x: $screen.x,
+			y: $screen.y,
+			width: $screen.w,
+			height: $screen.h,
+			camera: $camera,
+			camera_refs: [$camera.x, $camera.y, $camera.scale, $camera.w, $camera.h]
+		};
+
+		if (!compare(to_check, previous_to_check)) {
+
+			debouncedCountAllChildElements();
+
+			previous_to_check = to_check;
+		}
+
+
+	}
+
 
 	function focusOn(x, y, w, h, duration, easing, ratio) {
 		var tgt_scale = 1;
@@ -338,10 +365,12 @@
 	<slot />
 </div>
 {#if debug}
-<div
-	style="position:absolute;padding:5px;font-size:xx-small;bottom:5px;right:5px;font-family:Courier;border:solid rgba(0,0,0,0.2) 1px;border-radius:3px;padding:11px;box-suzing:border-box;background-color:rgba(255,255,255,0.8);z-index:1000;"
->
-	x: {Math.round($screen.x)}, y: {Math.round($screen.y)}<br/>{Math.round($screen.w)} x {Math.round($screen.h)}
-	<br>Elements: {totalElementCount}
-</div>
+	<div
+		style="position:absolute;padding:5px;font-size:xx-small;bottom:5px;right:5px;font-family:Courier;border:solid rgba(0,0,0,0.2) 1px;border-radius:3px;padding:11px;box-suzing:border-box;background-color:rgba(255,255,255,0.8);z-index:1000;"
+	>
+		x: {Math.round($screen.x)}, y: {Math.round($screen.y)}<br />{Math.round($screen.w)} x {Math.round(
+			$screen.h
+		)}
+		<br />Elements: {totalElementCount}
+	</div>
 {/if}
