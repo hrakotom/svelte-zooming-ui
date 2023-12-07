@@ -151,3 +151,22 @@ export function evaluateCoords(params) {
 
 }
 
+// Function to adjust Decimal precision based on zoom scale (Decimal instance)                                                                                                                                                        
+export function adjustDecimalPrecision(zoomScaleDecimal) {
+  // Define a base precision level                                                                                                                                                                                                  
+  const basePrecision = 20; // This is an example value                                                                                                                                                                             
+
+  // Calculate the new precision based on the zoom scale                                                                                                                                                                            
+  // The formula for precision adjustment can be tweaked as needed                                                                                                                                                                  
+  // Ensure that zoomScaleDecimal is a Decimal instance                                                                                                                                                                             
+
+  const zoomScaleNumber = zoomScaleDecimal.toNumber();
+  // extract the number of digits in the zoom scale
+  let nb_digits = (""+Math.round(zoomScaleNumber)).length;
+  console.log("Digits: " + nb_digits);
+  const newPrecision = Math.min(Math.max(nb_digits*2, basePrecision), Decimal.maxE);
+  let previousPrecision = Decimal.precision;
+
+  // Update Decimal precision                                                                                                                                                                                                       
+  Decimal.set({ precision: newPrecision });
+}                                                                                                                                                                                                                                     

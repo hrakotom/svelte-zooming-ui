@@ -32,7 +32,7 @@
 	y={$frame.y}
 	width={$frame.width}
 	height={$frame.height}
-	depth={Decimal($frame.depth + 1)}
+	depth={$frame.depth.plus(1)}
 	debug={false}
 >
 	{#if $frame.ratio <= 10.0}
@@ -46,13 +46,13 @@
 		</div>
 	{/if}
 </Positionable>
-{#if $frame.ratio >= 0.5}
+{#if $frame.ratio >= 0.8}
 	<Positionable
 		x={$frame.x.minus($frame.width.div(4.1))}
 		y={$frame.y.plus($frame.height.div(4.1))}
 		width={$frame.width.div(2.2)}
 		height={$frame.height.div(2.2)}
-		depth={Decimal($frame.depth + 1)}
+		depth={$frame.depth.plus(1)}
 		debug={false}
 	>
 		<LOD slot="positionable" />
@@ -62,7 +62,7 @@
 		y={$frame.y.plus($frame.height.div(4.1))}
 		width={$frame.width.div(2.2)}
 		height={$frame.height.div(2.2)}
-		depth={Decimal($frame.depth + 1)}
+		depth={$frame.depth.plus(1)}
 		debug={false}
 	>
 		<LOD slot="positionable" />
@@ -72,7 +72,7 @@
 		y={$frame.y.minus($frame.height.div(4.1))}
 		width={$frame.width.div(2.2)}
 		height={$frame.height.div(2.2)}
-		depth={Decimal($frame.depth + 1)}
+		depth={$frame.depth.plus(1)}
 		debug={false}
 	>
 		<LOD slot="positionable" />
@@ -82,7 +82,7 @@
 		y={$frame.y.minus($frame.height.div(4.1))}
 		width={$frame.width.div(2.2)}
 		height={$frame.height.div(2.2)}
-		depth={Decimal($frame.depth + 1)}
+		depth={$frame.depth.plus(1)}
 		debug={false}
 	>
 		<LOD slot="positionable" />

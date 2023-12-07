@@ -60,11 +60,11 @@
 		if(!compare(to_check, previous_to_check)) {
 			// console.log('Evaluating coords: ' + JSON.stringify(to_check, null, ' '));
 			evaluated = evaluateCoords(to_check);
-			// console.log("Got: " + JSON.stringify(evaluated, null, ' '));
+			console.log("Got: " + JSON.stringify(evaluated, null, ' '));
 			if(evaluated.visible) {
 				let factor = evaluated.screen_width.div(evaluated.tgt_width);
 				let factor_height = evaluated.screen_height.div(evaluated.tgt_height);
-				let ratio = Decimal.max(factor, factor_height);
+				let ratio = Decimal.min(factor, factor_height);
 				// console.log("Factor: " + factor);
 				// console.log([reference_width, evaluated.tgt_width.toNumber()]);
 				$frame = {...to_check, factor: factor, ratio: ratio};

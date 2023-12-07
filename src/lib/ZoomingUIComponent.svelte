@@ -11,7 +11,7 @@
 	import { onMount, onDestroy, createEventDispatcher, setContext } from 'svelte';
 	import { writable } from 'svelte/store';
 	import { BROWSER } from 'esm-env';
-	import { uuid4, positionObserved } from '$lib//utils.js';
+	import { uuid4, positionObserved, adjustDecimalPrecision } from '$lib//utils.js';
 	import Decimal from 'decimal.js';
 	import lodash from 'lodash';
 	import interact from 'interactjs';
@@ -387,6 +387,14 @@
 	setContext('zui', id);
 	setContext('lookAt', lookAt);
 	setContext('focusOn', focusOn);
+
+	// Reactive statement to adjust precision
+	$: if (BROWSER) {
+		adjustDecimalPrecision($camera.scale);
+	}
+
+
+
 </script>
 
 <div
@@ -406,5 +414,6 @@
 			$screen.h
 		)}
 		<br />Elements: {totalElementCount}
+		<br/>Scale: {$camera.scale}
 	</div>
 {/if}
