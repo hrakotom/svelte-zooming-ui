@@ -11,8 +11,7 @@
 		"test:integration": "playwright test",
 		"test:unit": "vitest",
 		"lint": "prettier --plugin-search-dir . --check .",
-		"format": "prettier --plugin-search-dir . --write .",
-		"generate-docs": "node_modules/.bin/sveltedoc-parser -i src -o docs"
+		"format": "prettier --plugin-search-dir . --write ."
 	},
 	"exports": {
 		".": {
