@@ -1,8 +1,9 @@
 <script>
 	/**
-	 * Positionable component that represents an element with a specific position and size.
+	 * Positionable component that represents an element with a specific position and size within the zoomable UI.
 	 * It calculates its visibility and transformation based on the camera's view and updates
-	 * its style accordingly. It also provides a frame context for child components.
+	 * its style accordingly. It also provides a frame context for child components to align themselves within the UI.
+	 * This component is essential for positioning and rendering elements at the correct scale and position.
 	 * @component
 	 */
 	import { onMount, onDestroy, getContext, setContext } from 'svelte';

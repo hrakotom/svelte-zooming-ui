@@ -1,7 +1,8 @@
 <script>
 	/**
-	 * Clickable component that can be used to make an area interactive.
-	 * It responds to click events by invoking a focus action to center the view on itself.
+	 * Clickable component that can be used to make an area interactive within the zoomable UI.
+	 * It responds to click events by invoking a focus action to center the view on itself, facilitating user interaction.
+	 * This component is typically used to create buttons or interactive areas that require user engagement.
 	 * @component
 	 */
     import { getContext } from "svelte";

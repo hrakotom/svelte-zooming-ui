@@ -3,6 +3,7 @@
 	 * Page component that serves as the main entry point for the application's UI.
 	 * It includes various UI components like ZUI, Positionable, Clickable, Embedded, and LOD.
 	 * It also handles the selection and interaction logic for different UI sections.
+	 * This component orchestrates the layout and behavior of the zoomable user interface.
 	 * @component
 	 */
     import { BROWSER } from 'esm-env';
