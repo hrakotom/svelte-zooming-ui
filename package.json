@@ -42,18 +42,18 @@
 		"tslib": "^2.4.1",
 		"typescript": "^5.0.0",
 		"vite": "^4.4.2",
-		"vitest": "^0.32.2",
-		"sveltedoc-parser": "^3.0.0"
+		"vitest": "^0.32.2"
 	},
 	"svelte": "./dist/index.js",
 	"types": "./dist/index.d.ts",
 	"type": "module",
 	"dependencies": {
-		"interactjs": "^1.10.19",
-		"lodash": "^4.17.21",
-		"just-compare": "^2.3.0",
 		"animejs": "^3.2.1",
+		"decimal.js": "^10.4.3",
+		"interactjs": "^1.10.19",
+		"just-compare": "^2.3.0",
+		"lodash": "^4.17.21",
 		"pure-uuid": "^1.8.1",
-		"decimal.js": "^10.4.3"
+		"sveltedoc-parser": "^4.2.1"
 	}
 }
