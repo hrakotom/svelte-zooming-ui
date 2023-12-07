@@ -1,4 +1,9 @@
 <script>
+	/**
+	 * Clickable component that can be used to make an area interactive.
+	 * It responds to click events by invoking a focus action to center the view on itself.
+	 * @component
+	 */
     import { getContext } from "svelte";
 
     export let bgcolor = "red";

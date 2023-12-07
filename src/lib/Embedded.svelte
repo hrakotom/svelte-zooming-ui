@@ -1,4 +1,9 @@
 <script>
+	/**
+	 * Embedded component that can be interacted with to focus on a specific area.
+	 * It responds to click events by logging the frame details and invoking a focus action.
+	 * @component
+	 */
     import { getContext, onMount } from "svelte";
     import Positionable from '$lib/Positionable.svelte';
     import Decimal from 'decimal.js';

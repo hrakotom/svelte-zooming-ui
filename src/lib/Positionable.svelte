@@ -1,4 +1,10 @@
 <script>
+	/**
+	 * Positionable component that represents an element with a specific position and size.
+	 * It calculates its visibility and transformation based on the camera's view and updates
+	 * its style accordingly. It also provides a frame context for child components.
+	 * @component
+	 */
 	import { onMount, onDestroy, getContext, setContext } from 'svelte';
 	import { BROWSER } from 'esm-env';
 	import Decimal from 'decimal.js';

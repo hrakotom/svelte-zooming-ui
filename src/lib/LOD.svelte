@@ -2,6 +2,8 @@
 	/**
 	 * LOD (Level of Detail) component that reacts to clicks by focusing on its frame.
 	 * It displays or hides different items depending on the zoom level of the component.
+	 * This component is used to manage the complexity of a scene by adjusting the amount
+	 * of detail shown based on the component's zoom level, improving performance.
 	 * @component
 	 */
 	import { getContext } from 'svelte';

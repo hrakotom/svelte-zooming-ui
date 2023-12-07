@@ -1,4 +1,10 @@
 <script>
+	/**
+	 * Page component that serves as the main entry point for the application's UI.
+	 * It includes various UI components like ZUI, Positionable, Clickable, Embedded, and LOD.
+	 * It also handles the selection and interaction logic for different UI sections.
+	 * @component
+	 */
     import { BROWSER } from 'esm-env';
     import ZUI from '$lib/ZoomingUIComponent.svelte';
     import Positionable from '$lib/Positionable.svelte';
