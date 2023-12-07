@@ -1,4 +1,13 @@
 <script>
+	/**
+	 * A Svelte component that provides a zoomable user interface (ZUI) functionality.
+	 * It allows elements within the container to be zoomed in and out and to be focused upon.
+	 * This component handles user interactions such as tap, hold, drag, and mouse wheel events
+	 * to manipulate the view of the ZUI.
+	 *
+	 * @component
+	 * @prop {boolean} debug - Enables debug mode which provides additional visual output.
+	 */
 	import { onMount, onDestroy, createEventDispatcher, setContext } from 'svelte';
 	import { writable } from 'svelte/store';
 	import { BROWSER } from 'esm-env';
@@ -9,6 +18,10 @@
 	import anime from 'animejs';
 	import compare from 'just-compare';
 
+	/**
+	 * Toggles the debug mode for the component, providing additional visual output.
+	 * @type {boolean}
+	 */
 	export let debug = false;
 
 	let containerElement;
@@ -77,6 +90,18 @@
 	}
 
 
+	/**
+	 * Focuses the camera on a specified rectangle area within the ZUI.
+	 * The view is smoothly transitioned to center on the given rectangle.
+	 *
+	 * @param {Decimal|number} x - The x-coordinate of the top-left corner of the rectangle.
+	 * @param {Decimal|number} y - The y-coordinate of the top-left corner of the rectangle.
+	 * @param {Decimal|number} w - The width of the rectangle.
+	 * @param {Decimal|number} h - The height of the rectangle.
+	 * @param {number} [duration=500] - The duration of the focus animation in milliseconds.
+	 * @param {string} [easing='easeInOutCubic'] - The easing function to use for the transition.
+	 * @param {Decimal|number} [ratio=0.8] - The ratio of the screen that the rectangle should occupy.
+	 */
 	function focusOn(x, y, w, h, duration, easing, ratio) {
 		var tgt_scale = 1;
 		if (duration === null || duration === void 0) duration = 500;
@@ -266,6 +291,15 @@
 		}
 	}
 
+	/**
+	 * Moves the camera to look at a specific point with a given scale.
+	 *
+	 * @param {Decimal|number} x - The x-coordinate to look at.
+	 * @param {Decimal|number} y - The y-coordinate to look at.
+	 * @param {Decimal|number} scale - The scale level to set the camera to.
+	 * @param {number} [duration=300] - The duration of the camera movement in milliseconds.
+	 * @param {string} [easing='easeInOutCubic'] - The easing function to use for the camera movement.
+	 */
 	export const lookAt = function (x, y, scale, duration, easing) {
 		// console.log(id + ': Camera is moving: ' + JSON.stringify([x, y, scale], null, ' '));
 
