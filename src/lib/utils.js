@@ -163,7 +163,7 @@ export function adjustDecimalPrecision(zoomScaleDecimal) {
   const zoomScaleNumber = zoomScaleDecimal.toNumber();
   // extract the number of digits in the zoom scale
   let nb_digits = (""+Math.round(zoomScaleNumber)).length;
-  console.log("Digits: " + nb_digits);
+  // console.log("Digits: " + nb_digits);
   const newPrecision = Math.min(Math.max(nb_digits*2, basePrecision), Decimal.maxE);
   let previousPrecision = Decimal.precision;
 

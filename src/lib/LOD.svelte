@@ -35,9 +35,9 @@
 	depth={$frame.depth.plus(1)}
 	debug={false}
 >
-	{#if $frame.ratio <= 10.0}
+	{#if $frame.ratio <= 20.0}
 		<div
-			style="width:100%;height:100%;background-color:rgba(96, 196, 109, 0.3);cursor:pointer;box-sizing:border-box;border-radius:11px;border:solid rgba(255,255,255,1.0) 1px;"
+			style="width:100%;height:100%;background-color:rgba(96, 196, 109, 0.3);cursor:pointer;box-sizing:border-box;border-radius:11px;border:solid rgba(0, 20, 0, 0.4) {Decimal(1).div($frame.factor).toNumber()}px;"
 			on:click={clicked}
 		>
 			<div style="position:absolute;right:5px;top:5px;color:rgba(0, 0, 0, 0.6);z-index:1;font-size:8px;">
