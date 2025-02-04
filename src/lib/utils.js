@@ -5,15 +5,29 @@ import anime from "animejs";
 import { beforeUpdate } from 'svelte'
 
 /**
+ * Collection of utility functions for the Svelte Zooming UI library.
+ * These functions handle coordinate calculations, bounding boxes, and precision adjustments.
+ * @module utils
+ */
+
+/**
  * Generates a version 4 UUID (random).
+ * Used for creating unique identifiers for components.
  * @returns {string} A random UUID string.
  */
 export function uuid4() {
   return new UUID(4);
 }
 
-// Gets the bbox of coordinates, offset can be used to
-// expand/shrink the resulting bbox
+/**
+ * Calculates a bounding box for given coordinates and dimensions.
+ * @param {Decimal} x - The x coordinate of the center
+ * @param {Decimal} y - The y coordinate of the center
+ * @param {Decimal} width - The width of the box
+ * @param {Decimal} height - The height of the box
+ * @param {Decimal} [offset=0] - Optional offset to expand/shrink the box
+ * @returns {Object} Bounding box with left, right, top, bottom coordinates
+ */
 export function getBBox(x, y, width, height, offset) {
 
   if (!offset) offset = 0;
@@ -26,7 +40,12 @@ export function getBBox(x, y, width, height, offset) {
   };
 }
 
-// Returns true if two bounding boxes intersect
+/**
+ * Checks if two bounding boxes intersect.
+ * @param {Object} r1 - First bounding box {left, right, top, bottom}
+ * @param {Object} r2 - Second bounding box {left, right, top, bottom}
+ * @returns {boolean} True if the boxes intersect
+ */
 export function intersectsBBox(r1, r2) {
 
   return !(
@@ -38,8 +57,15 @@ export function intersectsBBox(r1, r2) {
 
 }
 
-// action to get position and size of an element
-// as an alternative to svelte bind:this
+/**
+ * Svelte action to observe an element's position and size.
+ * Updates a store with the element's current dimensions.
+ * Alternative to using bind:this in Svelte components.
+ * 
+ * @param {HTMLElement} el - The element to observe
+ * @param {import('svelte/store').Writable} store - Store to update with position data
+ * @returns {Object} Action cleanup handler
+ */
 export function positionObserved(el, store) {
 
   let dirty;
@@ -78,6 +104,19 @@ export function positionObserved(el, store) {
   }
 }
 
+/**
+ * Evaluates coordinates and dimensions for positioning elements in the zooming UI.
+ * Calculates visibility, transformation matrix, and screen dimensions based on camera position.
+ * 
+ * @param {Object} params - Parameters for coordinate evaluation
+ * @param {Object} params.camera - Camera state {x, y, scale, w, h}
+ * @param {Decimal} params.x - X coordinate
+ * @param {Decimal} params.y - Y coordinate
+ * @param {Decimal} params.width - Width
+ * @param {Decimal} params.height - Height
+ * @param {Decimal} [params.reference_width=500] - Reference width for scaling
+ * @returns {Object} Evaluated coordinates and transformation data
+ */
 export function evaluateCoords(params) {
 
   // console.log("Evaluating coords");
@@ -151,7 +190,12 @@ export function evaluateCoords(params) {
 
 }
 
-// Function to adjust Decimal precision based on zoom scale (Decimal instance)                                                                                                                                                        
+/**
+ * Adjusts Decimal.js precision based on zoom scale to maintain accuracy.
+ * Dynamically updates precision to handle different zoom levels efficiently.
+ * 
+ * @param {Decimal} zoomScaleDecimal - Current zoom scale
+ */
 export function adjustDecimalPrecision(zoomScaleDecimal) {
   // Define a base precision level                                                                                                                                                                                                  
   const basePrecision = 20; // This is an example value                                                                                                                                                                             
