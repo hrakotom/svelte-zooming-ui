@@ -1,6 +1,14 @@
 {
 	"name": "svelte-zooming-ui",
 	"version": "0.0.24",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/hrakotom/svelte-zooming-ui.git"
+	},
+	"bugs": {
+		"url": "https://github.com/hrakotom/svelte-zooming-ui/issues"
+	},
+	"homepage": "https://github.com/hrakotom/svelte-zooming-ui#readme",
 	"scripts": {
 		"dev": "vite dev",
 		"build": "vite build && npm run package",
