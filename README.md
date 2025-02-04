@@ -1,5 +1,7 @@
 # Svelte Zooming UI
 
+> **⚠️ Work In Progress**: While this library is functional and usable in its current state, it's still under active development. Breaking changes may occur in future versions.
+
 A powerful and flexible zooming user interface library for Svelte applications. Create infinite canvas experiences with intuitive pan and zoom controls.
 
 ## Features
