@@ -1,42 +1,128 @@
-# svelte-zooming-ui
+# Svelte Zooming UI
 
-WARNING :: Work In Progress :: use at your own risk, breaking changes will occur
+A powerful and flexible zooming user interface library for Svelte applications. Create infinite canvas experiences with intuitive pan and zoom controls.
 
-Specification: A zooming user interface that just works. Like you imagined it would. With regular vanilla components.
+## Features
 
-## Example Usage
+- Smooth pan and zoom interactions
+- Touch gesture support
+- Infinite canvas
+- Precise decimal-based positioning
+- Level of detail management
+- Responsive and performant
 
-Here's a simple example of how to create a 2D zoomable scene using the `ZUI`, `Positionable`, and `Clickable` components:
+## Installation
+
+```bash
+npm install svelte-zooming-ui
+```
+
+## Core Components
+
+### ZoomingUIComponent
+
+The main container component that provides the zooming canvas functionality:
 
 ```svelte
 <script>
-    import ZUI from '$lib/ZoomingUIComponent.svelte';
-    import Positionable from '$lib/Positionable.svelte';
-    import Clickable from '$lib/Clickable.svelte';
-    import Decimal from 'decimal.js';
-
+    import { ZoomingUIComponent } from 'svelte-zooming-ui';
+    
     let lookAt;
+</script>
 
-    function handleZuiNotification(event) {
-        console.log("ZUI notification: " + event.detail);
+<ZoomingUIComponent bind:lookAt debug={false}>
+    <!-- Your zoomable content here -->
+</ZoomingUIComponent>
+```
+
+### Positionable
+
+A component for positioning elements within the zooming canvas:
+
+```svelte
+<script>
+    import { ZoomingUIComponent, Positionable } from 'svelte-zooming-ui';
+    import Decimal from 'decimal.js';
+</script>
+
+<ZoomingUIComponent>
+    <Positionable 
+        x={Decimal(0)} 
+        y={Decimal(0)} 
+        width={Decimal(100)} 
+        height={Decimal(100)} 
+        depth={Decimal(1)}
+    >
+        <div>Your content here</div>
+    </Positionable>
+</ZoomingUIComponent>
+```
+
+## Advanced Usage
+
+### Camera Control
+
+The ZoomingUIComponent provides a `lookAt` function for programmatic control:
+
+```svelte
+<script>
+    let lookAt;
+    
+    function centerOn(x, y, scale) {
+        lookAt(x, y, scale);
     }
 </script>
 
-<ZUI on:zui-notification={handleZuiNotification} debug={true} bind:lookAt={lookAt}>
-    <Positionable x={Decimal(0)} y={Decimal(0)} width={Decimal(50)} height={Decimal(50)} depth={Decimal(1)} debug={false}>
-        <Clickable bgcolor="yellow">Positionable Element</Clickable>
-    </Positionable>
-    <Positionable x={Decimal(60)} y={Decimal(60)} width={Decimal(50)} height={Decimal(50)} depth={Decimal(1)} debug={false}>
-        <Clickable bgcolor="blue">Another Positionable Element</Clickable>
-    </Positionable>
-</ZUI>
+<ZoomingUIComponent bind:lookAt>
+    <button on:click={() => centerOn(Decimal(0), Decimal(0), Decimal(1))}>
+        Reset View
+    </button>
+</ZoomingUIComponent>
 ```
 
-## To-Do List
+### Level of Detail
 
-- [x] create two basic components for the zui.
-- [x] Give Each zui component has zooming capability.
-    - [x] create a lookAt function that takes a point and a zoom level.
-    - [x] Handle drag events.
-    - [x] Handle zoom events. ( finger and mouse wheel )
+Manage content detail based on zoom level:
+
+```svelte
+<Positionable x={x} y={y} width={width} height={height}>
+    {#if $frame.ratio <= 20.0}
+        <HighDetailContent />
+    {:else}
+        <LowDetailContent />
+    {/if}
+</Positionable>
+```
+
+## API Reference
+
+### ZoomingUIComponent Props
+
+- `debug` (boolean): Enables debug visualization
+- `lookAt` (function): Bind to control camera position
+
+### Positionable Props
+
+- `x` (Decimal): X coordinate
+- `y` (Decimal): Y coordinate
+- `width` (Decimal): Width
+- `height` (Decimal): Height
+- `depth` (Decimal): Z-index depth
+- `debug` (boolean): Enables debug visualization
+
+## Examples
+
+Check out our example components:
+
+- `Clickable.svelte`: Interactive area example
+- `LOD.svelte`: Level of detail implementation
+- `Embedded.svelte`: Nested content example
+
+## Contributing
+
+Contributions are welcome! Please see our contributing guidelines for details.
+
+## License
+
+MIT License - see LICENSE.md for details
 
