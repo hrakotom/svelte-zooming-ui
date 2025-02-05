@@ -58,6 +58,17 @@
                             setTimeout(lookie, 100);
                             return;
                         } else {
+                            try{
+                                focusOn(Decimal(0), Decimal(60), Decimal(1000), Decimal(1000), 800, null, .8);
+                            } catch(e) {
+                                console.log("Failed focus");
+                            }
+                            try{
+                                console.log("Current camera: ");
+                                console.log($camera);
+                            } catch(e) {
+                                console.log("Failed printing camera");
+                            }
                             lookAt(Decimal(0), Decimal(60), Decimal(5.0), 1000, 'easeInOutCubic');
                         }
                     }
