@@ -387,10 +387,44 @@
 		// world.setPanning();
 	}
 
+	// Provide context variables for child components
+	
+	/**
+	 * The screen store contains the viewport dimensions and position
+	 * @type {import('svelte/store').Writable<{x: Decimal, y: Decimal, w: Decimal, h: Decimal}>}
+	 */
 	setContext('screen', screen);
+
+	/**
+	 * The camera store contains the current view transformation state
+	 * @type {import('svelte/store').Writable<{
+	 *   x: Decimal,      // Camera x position
+	 *   y: Decimal,      // Camera y position
+	 *   z: Decimal,      // Camera z position (depth)
+	 *   scale: Decimal,  // Current zoom scale
+	 *   w: Decimal,      // Viewport width
+	 *   h: Decimal,      // Viewport height
+	 *   fov: Decimal     // Field of view
+	 * }>}
+	 */
 	setContext('camera', camera);
+
+	/**
+	 * The unique ID of this ZoomingUI instance
+	 * @type {string}
+	 */
 	setContext('zui', id);
+
+	/**
+	 * Function to programmatically move the camera
+	 * @type {(x: Decimal|number, y: Decimal|number, scale: Decimal|number, duration?: number, easing?: string) => void}
+	 */
 	setContext('lookAt', lookAt);
+
+	/**
+	 * Function to focus the camera on a specific rectangle area
+	 * @type {(x: Decimal|number, y: Decimal|number, w: Decimal|number, h: Decimal|number, duration?: number, easing?: string, ratio?: Decimal|number) => void}
+	 */
 	setContext('focusOn', focusOn);
 
 	// Reactive statement to adjust precision
