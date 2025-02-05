@@ -62,9 +62,9 @@ A component for positioning elements within the zooming canvas:
 
 ## Advanced Usage
 
-### Context Variables
+### Stores and Functions
 
-The following context variables are provided to child components:
+The following exports are provided:
 
 - `screen`: A writable store containing viewport dimensions and position `{x, y, w, h}`
 - `camera`: A writable store containing view transformation state `{x, y, z, scale, w, h, fov}`
@@ -73,7 +73,35 @@ The following context variables are provided to child components:
 
 ### Camera Control
 
-The ZoomingUIComponent provides a `lookAt` function for programmatic control:
+You can control the camera programmatically using the `lookAt` function or monitor its state using the `camera` store:
+
+```svelte
+<script>
+    import { ZoomingUIComponent, camera } from 'svelte-zooming-ui';
+    import Decimal from 'decimal.js';
+    
+    let lookAt;
+    
+    // Subscribe to camera changes
+    $: console.log('Current scale:', $camera.scale.toString());
+    
+    function zoomIn() {
+        // Double the current zoom level
+        lookAt(
+            $camera.x,
+            $camera.y, 
+            $camera.scale.times(2)
+        );
+    }
+</script>
+
+<ZoomingUIComponent bind:lookAt>
+    <button on:click={zoomIn}>Zoom In</button>
+    <div>Current zoom: {$camera.scale.toFixed(2)}x</div>
+</ZoomingUIComponent>
+```
+
+The camera store provides real-time access to:
 
 ```svelte
 <script>
