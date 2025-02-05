@@ -17,7 +17,7 @@
     import { onMount, createEventDispatcher } from 'svelte';
 
     let verbose = true;
-    let lookAt = null;
+    let lookAt, focusOn, camera, screen;
 
     let menu = {
         "basic-stuff" : {
@@ -106,7 +106,7 @@
 {/if}
 {#if menu['full-screen-and-lod'].selected}
     <div style="border:solid green 0px;width:100%;height:100%;top:0px;left:0px;position:absolute;box-sizing:border-box;z-index:1;">
-        <ZUI on:zui-notification={handleZuiNotification} debug={true} bind:lookAt={lookAt}>
+        <ZUI on:zui-notification={handleZuiNotification} debug={true} bind:lookAt={lookAt} bind:camera={camera} bind:screen={screen} bind:focusOn={focusOn}>
             <Positionable x={Decimal(0)} y={Decimal(0)} width={Decimal(50)} height={Decimal(50)} depth={Decimal(1)} debug={false}>
                 <Clickable bgcolor="yellow">Positionable Element</Clickable>
             </Positionable>
