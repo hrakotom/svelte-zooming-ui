@@ -263,7 +263,12 @@
 			.styleCursor(false);
 	});
 
-	onDestroy(() => {});
+	onDestroy(() => {
+		if (BROWSER) {
+			// Clean up interact instance
+			interact('#' + id).unset();
+		}
+	});
 
 	let screenResized = lodash.debounce(function () {
 		console.log('Screen dims change, reset camera');
