@@ -11,7 +11,7 @@
 	import { onMount, onDestroy, createEventDispatcher, setContext } from 'svelte';
 	import { writable } from 'svelte/store';
 	import { BROWSER } from 'esm-env';
-	import { uuid4, positionObserved, adjustDecimalPrecision } from '$lib//utils.js';
+	import { uuid4, positionObserved, adjustDecimalPrecision } from '$lib/utils.js';
 	import Decimal from 'decimal.js';
 	import lodash from 'lodash';
 	import interact from 'interactjs';
@@ -39,7 +39,8 @@
 
 	let debouncedCountAllChildElements = lodash.debounce(function () {
 		if(!containerElement) return;
-		console.log('Counting the suckers');
+		if(debug)
+			console.log('Counting the suckers');
 		totalElementCount = countAllChildElements(containerElement);
 	}, 1500);
 
@@ -48,14 +49,14 @@
 
 	let previous_screen = null;
 
-	export const screen = writable({
+	export let screen = writable({
 		x: Decimal(0),
 		y: Decimal(0),
 		w: Decimal(0),
 		h: Decimal(0)
 	});
 
-	export const  camera = writable({
+	export let  camera = writable({
 		x: Decimal(0),
 		y: Decimal(0),
 		z: Decimal(0),
@@ -102,7 +103,7 @@
 	 * @param {string} [easing='easeInOutCubic'] - The easing function to use for the transition.
 	 * @param {Decimal|number} [ratio=0.8] - The ratio of the screen that the rectangle should occupy.
 	 */
-	export const focusOn = function (x, y, w, h, duration, easing, ratio) {
+	export let focusOn = function (x, y, w, h, duration, easing, ratio) {
 		var tgt_scale = 1;
 		if (duration === null || duration === void 0) duration = 500;
 		if (easing === null || easing === void 0) easing = 'easeInOutCubic';
@@ -271,7 +272,8 @@
 	});
 
 	let screenResized = lodash.debounce(function () {
-		console.log('Screen dims change, reset camera');
+		if(debug)
+			console.log('Screen dims change, reset camera');
 
 		$camera.w = Decimal($screen.w);
 		$camera.h = Decimal($screen.h);
@@ -279,7 +281,8 @@
 	}, 0);
 
 	let screenResizedImmediate = function () {
-		console.log('Screen dims change, reset camera (immediate)');
+		if(debug)
+			console.log('Screen dims change, reset camera (immediate)');
 
 		$camera.w = Decimal($screen.w);
 		$camera.h = Decimal($screen.h);
@@ -305,7 +308,7 @@
 	 * @param {number} [duration=300] - The duration of the camera movement in milliseconds.
 	 * @param {string} [easing='easeInOutCubic'] - The easing function to use for the camera movement.
 	 */
-	export const lookAt = function (x, y, scale, duration, easing) {
+	export let lookAt = function (x, y, scale, duration, easing) {
 		// console.log(id + ': Camera is moving: ' + JSON.stringify([x, y, scale], null, ' '));
 
 		var param = null;
