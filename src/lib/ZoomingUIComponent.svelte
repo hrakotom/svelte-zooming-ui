@@ -1,4 +1,5 @@
 <svelte:options accessors={true} />
+
 <script>
 	/**
 	 * A Svelte component that provides a zoomable user interface (ZUI) functionality.
@@ -39,9 +40,8 @@
 	}
 
 	let debouncedCountAllChildElements = lodash.debounce(function () {
-		if(!containerElement) return;
-		if(debug)
-			console.log('Counting the suckers');
+		if (!containerElement) return;
+		if (debug) console.log('Counting the suckers');
 		totalElementCount = countAllChildElements(containerElement);
 	}, 1500);
 
@@ -50,14 +50,14 @@
 
 	let previous_screen = null;
 
-	export let screen = writable({
+	const screen = writable({
 		x: Decimal(0),
 		y: Decimal(0),
 		w: Decimal(0),
 		h: Decimal(0)
 	});
 
-	export let  camera = writable({
+	const camera = writable({
 		x: Decimal(0),
 		y: Decimal(0),
 		z: Decimal(0),
@@ -82,15 +82,11 @@
 		};
 
 		if (!compare(to_check, previous_to_check)) {
-
 			debouncedCountAllChildElements();
 
 			previous_to_check = to_check;
 		}
-
-
 	}
-
 
 	/**
 	 * Focuses the camera on a specified rectangle area within the ZUI.
@@ -104,7 +100,7 @@
 	 * @param {string} [easing='easeInOutCubic'] - The easing function to use for the transition.
 	 * @param {Decimal|number} [ratio=0.8] - The ratio of the screen that the rectangle should occupy.
 	 */
-	export let focusOn = function (x, y, w, h, duration, easing, ratio) {
+	export const focusOn = function (x, y, w, h, duration, easing, ratio) {
 		var tgt_scale = 1;
 		if (duration === null || duration === void 0) duration = 500;
 		if (easing === null || easing === void 0) easing = 'easeInOutCubic';
@@ -121,7 +117,7 @@
 			tgt_scale = scale.dividedBy(h).times($camera.h);
 		}
 		lookAt(x, y, tgt_scale, duration, easing);
-	}
+	};
 
 	onMount(() => {
 		let holder = {};
@@ -273,8 +269,7 @@
 	});
 
 	let screenResized = lodash.debounce(function () {
-		if(debug)
-			console.log('Screen dims change, reset camera');
+		if (debug) console.log('Screen dims change, reset camera');
 
 		$camera.w = Decimal($screen.w);
 		$camera.h = Decimal($screen.h);
@@ -282,8 +277,7 @@
 	}, 0);
 
 	let screenResizedImmediate = function () {
-		if(debug)
-			console.log('Screen dims change, reset camera (immediate)');
+		if (debug) console.log('Screen dims change, reset camera (immediate)');
 
 		$camera.w = Decimal($screen.w);
 		$camera.h = Decimal($screen.h);
@@ -309,7 +303,7 @@
 	 * @param {number} [duration=300] - The duration of the camera movement in milliseconds.
 	 * @param {string} [easing='easeInOutCubic'] - The easing function to use for the camera movement.
 	 */
-	export let lookAt = function (x, y, scale, duration, easing) {
+	export const lookAt = function (x, y, scale, duration, easing) {
 		// console.log(id + ': Camera is moving: ' + JSON.stringify([x, y, scale], null, ' '));
 
 		var param = null;
@@ -375,6 +369,10 @@
 		});
 	};
 
+	export const getCameraAndScreen = function () {
+		return { camera: $camera, screen: $screen };
+	};
+
 	function dragMoveListener(event) {
 		if (tween_camera) {
 			tween_camera.pause();
@@ -392,7 +390,7 @@
 	}
 
 	// Provide context variables for child components
-	
+
 	/**
 	 * The screen store contains the viewport dimensions and position
 	 * @type {import('svelte/store').Writable<{x: Decimal, y: Decimal, w: Decimal, h: Decimal}>}
@@ -435,9 +433,6 @@
 	$: if (BROWSER) {
 		adjustDecimalPrecision($camera.scale);
 	}
-
-
-
 </script>
 
 <div
@@ -457,6 +452,6 @@
 			$screen.h
 		)}
 		<br />Elements: {totalElementCount}
-		<br/>Scale: {$camera.scale}
+		<br />Scale: {$camera.scale}
 	</div>
 {/if}
