@@ -48,14 +48,14 @@
 
 	let previous_screen = null;
 
-	let screen = writable({
+	export const screen = writable({
 		x: Decimal(0),
 		y: Decimal(0),
 		w: Decimal(0),
 		h: Decimal(0)
 	});
 
-	let camera = writable({
+	export const  camera = writable({
 		x: Decimal(0),
 		y: Decimal(0),
 		z: Decimal(0),
@@ -102,7 +102,7 @@
 	 * @param {string} [easing='easeInOutCubic'] - The easing function to use for the transition.
 	 * @param {Decimal|number} [ratio=0.8] - The ratio of the screen that the rectangle should occupy.
 	 */
-	function focusOn(x, y, w, h, duration, easing, ratio) {
+	export const focusOn = function (x, y, w, h, duration, easing, ratio) {
 		var tgt_scale = 1;
 		if (duration === null || duration === void 0) duration = 500;
 		if (easing === null || easing === void 0) easing = 'easeInOutCubic';
