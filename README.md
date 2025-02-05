@@ -62,25 +62,31 @@ A component for positioning elements within the zooming canvas:
 
 ## Advanced Usage
 
-### Stores and Functions
+### Exports
 
-The following exports are provided:
+The following is exported:
+
+- `lookAt`: Function to programmatically move the camera `(x, y, scale, duration?, easing?)`
+
+### Context Values
+
+The following are available through Svelte context:
 
 - `screen`: A writable store containing viewport dimensions and position `{x, y, w, h}`
 - `camera`: A writable store containing view transformation state `{x, y, z, scale, w, h, fov}`
-- `lookAt`: Function to programmatically move the camera `(x, y, scale, duration?, easing?)`
 - `focusOn`: Function to focus on a specific area `(x, y, w, h, duration?, easing?, ratio?)`
 
 ### Camera Control
 
-You can control the camera programmatically using the `lookAt` function or monitor its state using the `camera` store:
+You can control the camera programmatically using the exported `lookAt` function, or access camera state through context:
 
 ```svelte
 <script>
-    import { ZoomingUIComponent, camera } from 'svelte-zooming-ui';
+    import { ZoomingUIComponent, lookAt } from 'svelte-zooming-ui';
+    import { getContext } from 'svelte';
     import Decimal from 'decimal.js';
     
-    let lookAt;
+    const camera = getContext('camera');
     
     // Subscribe to camera changes
     $: console.log('Current scale:', $camera.scale.toString());
@@ -95,13 +101,13 @@ You can control the camera programmatically using the `lookAt` function or monit
     }
 </script>
 
-<ZoomingUIComponent bind:lookAt>
+<ZoomingUIComponent>
     <button on:click={zoomIn}>Zoom In</button>
     <div>Current zoom: {$camera.scale.toFixed(2)}x</div>
 </ZoomingUIComponent>
 ```
 
-The camera store provides real-time access to:
+The camera context provides real-time access to:
 
 ```svelte
 <script>
