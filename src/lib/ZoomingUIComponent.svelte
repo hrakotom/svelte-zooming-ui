@@ -25,6 +25,12 @@
 	 * @type {boolean}
 	 */
 	export let debug = false;
+	export let camera;
+	export let screen;
+	export let focusOn;
+	export let lookAt;
+	export let getCameraAndScreen;
+
 
 	let containerElement;
 	let totalElementCount = 0;
@@ -50,14 +56,14 @@
 
 	let previous_screen = null;
 
-	export let screen = writable({
+	screen = writable({
 		x: Decimal(0),
 		y: Decimal(0),
 		w: Decimal(0),
 		h: Decimal(0)
 	});
 
-	export let  camera = writable({
+	camera = writable({
 		x: Decimal(0),
 		y: Decimal(0),
 		z: Decimal(0),
@@ -100,7 +106,7 @@
 	 * @param {string} [easing='easeInOutCubic'] - The easing function to use for the transition.
 	 * @param {Decimal|number} [ratio=0.8] - The ratio of the screen that the rectangle should occupy.
 	 */
-	export let focusOn = function (x, y, w, h, duration, easing, ratio) {
+	focusOn = function (x, y, w, h, duration, easing, ratio) {
 		var tgt_scale = 1;
 		if (duration === null || duration === void 0) duration = 500;
 		if (easing === null || easing === void 0) easing = 'easeInOutCubic';
@@ -303,7 +309,7 @@
 	 * @param {number} [duration=300] - The duration of the camera movement in milliseconds.
 	 * @param {string} [easing='easeInOutCubic'] - The easing function to use for the camera movement.
 	 */
-	export let lookAt = function (x, y, scale, duration, easing) {
+	lookAt = function (x, y, scale, duration, easing) {
 		// console.log(id + ': Camera is moving: ' + JSON.stringify([x, y, scale], null, ' '));
 
 		var param = null;
@@ -369,7 +375,7 @@
 		});
 	};
 
-	export let getCameraAndScreen = function () {
+	getCameraAndScreen = function () {
 		return { camera: $camera, screen: $screen };
 	};
 
