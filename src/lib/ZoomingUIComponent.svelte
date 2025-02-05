@@ -1,3 +1,4 @@
+<svelte:options accessors={true} />
 <script>
 	/**
 	 * A Svelte component that provides a zoomable user interface (ZUI) functionality.
