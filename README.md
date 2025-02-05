@@ -64,11 +64,10 @@ A component for positioning elements within the zooming canvas:
 
 ### Context Variables
 
-The ZoomingUIComponent provides several context variables that can be accessed by child components:
+The following context variables are provided to child components:
 
 - `screen`: A writable store containing viewport dimensions and position `{x, y, w, h}`
 - `camera`: A writable store containing view transformation state `{x, y, z, scale, w, h, fov}`
-- `zui`: The unique ID of the ZoomingUI instance
 - `lookAt`: Function to programmatically move the camera `(x, y, scale, duration?, easing?)`
 - `focusOn`: Function to focus on a specific area `(x, y, w, h, duration?, easing?, ratio?)`
 
