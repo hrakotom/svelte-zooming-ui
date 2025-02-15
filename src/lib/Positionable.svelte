@@ -30,6 +30,7 @@
 
 	let frame = writable({});
 	setContext('frame', frame);
+	setContext("reference_width", reference_width);
 
 	$: if (BROWSER) {
 		$frame.x = x;

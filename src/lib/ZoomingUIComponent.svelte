@@ -173,7 +173,9 @@
 				// if (world.ZOOMING || world.PANNING || $ui_store.app.devMode) return;
 
 				dispatch('background-hold', {
-					source: id
+					source: id,
+					x: evt.pageX,
+					y: evt.pageY
 					// Might need other params
 				});
 			})
