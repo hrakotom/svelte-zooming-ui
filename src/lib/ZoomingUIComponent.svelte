@@ -175,7 +175,8 @@
 				dispatch('background-hold', {
 					source: id,
 					x: evt.pageX,
-					y: evt.pageY
+					y: evt.pageY,
+					evt: evt
 					// Might need other params
 				});
 			})
