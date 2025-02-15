@@ -183,7 +183,7 @@
 			.on('up', function (evt) {
 				dispatch('background-hold-stop', {
 					source: id,
-					source_evt: evt
+					evt: evt
 					// Might need other params
 				});
 			})
