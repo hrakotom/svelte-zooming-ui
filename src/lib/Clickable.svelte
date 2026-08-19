@@ -7,7 +7,8 @@
 	 */
     import { getContext } from "svelte";
 
-    export let bgcolor = "red";
+    /** @type {{ bgcolor?: string, children?: import('svelte').Snippet }} */
+    let { bgcolor = "red", children } = $props();
 
     let focus = getContext("focusOn");
     let frame = getContext("frame");
@@ -20,6 +21,7 @@
 </script>
 
 
-<div style="width:100%;height:100%;background-color:{bgcolor};cursor:pointer;border:solid rgba(0,0,0,1) 0px;box-sizing:border-box;" on:click={clicked}>
-    <slot></slot>
+<!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
+<div style="width:100%;height:100%;background-color:{bgcolor};cursor:pointer;border:solid rgba(0,0,0,1) 0px;box-sizing:border-box;" onclick={clicked}>
+    {@render children?.()}
 </div>

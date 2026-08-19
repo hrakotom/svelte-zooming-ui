@@ -13,32 +13,37 @@
 	import compare from 'just-compare';
 	import { writable } from 'svelte/store';
 
-	export let x,
-		y,
-		width,
-		height,
-		depth,
-		reference_width = 500;
-
-	export let debug = false;
+	/**
+	 * @type {{ x: any, y: any, width: any, height: any, depth: any, reference_width?: number,
+	 *          debug?: boolean, children?: import('svelte').Snippet,
+	 *          positionable?: import('svelte').Snippet }}
+	 */
+	let {
+		x, y, width, height, depth,
+		reference_width = 500,
+		debug = false,
+		children,
+		positionable
+	} = $props();
 
 	let previous_to_check = null;
-	let evaluated = null;
+	let evaluated = $state(null);
 
 	let camera = getContext('camera');
-	let current_style = "display:none;will-change:transform;";
+	let current_style = $state("display:none;will-change:transform;");
 
 	let frame = writable({});
 	setContext('frame', frame);
 	setContext("reference_width", reference_width);
 
-	$: if (BROWSER) {
+	$effect(() => {
+		if (!BROWSER) return;
 		$frame.x = x;
 		$frame.y = y;
 		$frame.width = width;
 		$frame.height = height;
 		$frame.depth = depth;
-	}
+	});
 
 	onMount(function () {
 		// console.log("Props: " + JSON.stringify(Object.keys($$props), null, ' '));
@@ -46,8 +51,9 @@
 
 	let lookAt = getContext('lookAt');
 
-	$: if(BROWSER) {
-		
+	$effect(() => {
+		if (!BROWSER) return;
+
 		let to_check = {
             x: x,
             y: y,
@@ -78,8 +84,7 @@
 			}
 			previous_to_check = to_check;
 		}
-
-	}
+	});
 
 </script>
 {#if evaluated && evaluated.visible}
@@ -95,7 +100,7 @@
 				x: {Math.round(x)}, y: {Math.round(y)}<br />{Math.round(width)} x {Math.round(height)}
 			</div>
 		{/if} -->
-		<slot />
+		{@render children?.()}
 	</div>
-	<slot name="positionable" />
+	{@render positionable?.()}
 {/if}

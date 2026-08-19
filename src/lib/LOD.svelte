@@ -36,9 +36,10 @@
 	debug={false}
 >
 	{#if $frame.ratio <= 20.0}
+		<!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
 		<div
 			style="width:100%;height:100%;background-color:rgba(96, 196, 109, 0.3);cursor:pointer;box-sizing:border-box;border-radius:11px;border:solid rgba(0, 20, 0, 0.4) {Decimal(1).div($frame.factor).toNumber()}px;"
-			on:click={clicked}
+			onclick={clicked}
 		>
 			<div style="position:absolute;right:5px;top:5px;color:rgba(0, 0, 0, 0.6);z-index:1;font-size:8px;">
 				{Math.round($frame.ratio * 100) / 100}
@@ -55,7 +56,7 @@
 		depth={$frame.depth.plus(1)}
 		debug={false}
 	>
-		<LOD slot="positionable" />
+		{#snippet positionable()}<LOD />{/snippet}
 	</Positionable>
 	<Positionable
 		x={$frame.x.plus($frame.width.div(4.1))}
@@ -65,7 +66,7 @@
 		depth={$frame.depth.plus(1)}
 		debug={false}
 	>
-		<LOD slot="positionable" />
+		{#snippet positionable()}<LOD />{/snippet}
 	</Positionable>
 	<Positionable
 		x={$frame.x.minus($frame.width.div(4.1))}
@@ -75,7 +76,7 @@
 		depth={$frame.depth.plus(1)}
 		debug={false}
 	>
-		<LOD slot="positionable" />
+		{#snippet positionable()}<LOD />{/snippet}
 	</Positionable>
 	<Positionable
 		x={$frame.x.plus($frame.width.div(4.1))}
@@ -85,6 +86,6 @@
 		depth={$frame.depth.plus(1)}
 		debug={false}
 	>
-		<LOD slot="positionable" />
+		{#snippet positionable()}<LOD />{/snippet}
 	</Positionable>
 {/if}

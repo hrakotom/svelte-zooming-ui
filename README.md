@@ -28,14 +28,30 @@ The main container component that provides the zooming canvas functionality:
 ```svelte
 <script>
     import { ZoomingUIComponent } from 'svelte-zooming-ui';
-    
-    let lookAt;
+
+    let zui;
 </script>
 
-<ZoomingUIComponent bind:lookAt debug={false}>
+<ZoomingUIComponent
+    bind:this={zui}
+    debug={false}
+    onbackgroundtap={(d) => console.log('tap', d)}
+>
     <!-- Your zoomable content here -->
 </ZoomingUIComponent>
+
+<button onclick={() => zui.lookAt(x, y, scale)}>go</button>
 ```
+
+> **Svelte 5 / runes.** The library is runes-native as of the 5.x line, which changed two things
+> for consumers:
+> - **Imperative API**: `accessors` is gone, so `bind:lookAt` no longer works. Bind the component
+>   with `bind:this` and call `zui.lookAt(...)` / `zui.focusOn(...)` / `zui.getCameraAndScreen()`.
+> - **Events are callback props**: `on:background-tap` → `onbackgroundtap`,
+>   `on:background-hold` → `onbackgroundhold`, `on:background-hold-stop` → `onbackgroundholdstop`.
+>
+> Slots became snippets too: pass content as children as usual, and `Positionable`'s named
+> `positionable` slot is now a snippet — `{#snippet positionable()}...{/snippet}`.
 
 ### Positionable
 

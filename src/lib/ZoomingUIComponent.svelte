@@ -1,5 +1,3 @@
-<svelte:options accessors />
-
 <script>
 	/**
 	 * A Svelte component that provides a zoomable user interface (ZUI) functionality.
@@ -10,7 +8,7 @@
 	 * @component
 	 * @prop {boolean} debug - Enables debug mode which provides additional visual output.
 	 */
-	import { onMount, onDestroy, createEventDispatcher, setContext } from 'svelte';
+	import { onMount, onDestroy, setContext } from 'svelte';
 	import { writable } from 'svelte/store';
 	import { BROWSER } from 'esm-env';
 	import { uuid4, positionObserved, adjustDecimalPrecision } from '$lib/utils.js';
@@ -21,13 +19,25 @@
 	import compare from 'just-compare';
 
 	/**
-	 * Toggles the debug mode for the component, providing additional visual output.
-	 * @type {boolean}
+	 * Runes props. `children` replaces the default slot; the three `on*` callbacks replace the
+	 * `background-tap` / `background-hold` / `background-hold-stop` events that createEventDispatcher
+	 * used to emit — in runes there is no dispatcher, an event IS a callback prop.
+	 *
+	 * @type {{ debug?: boolean, children?: import('svelte').Snippet,
+	 *          onbackgroundtap?: (d: any) => void,
+	 *          onbackgroundhold?: (d: any) => void,
+	 *          onbackgroundholdstop?: (d: any) => void }}
 	 */
-	export let debug = false;
+	let {
+		debug = false,
+		children,
+		onbackgroundtap,
+		onbackgroundhold,
+		onbackgroundholdstop
+	} = $props();
 
-	let containerElement;
-	let totalElementCount = 0;
+	let containerElement = $state();
+	let totalElementCount = $state(0);
 	let previous_to_check = null;
 
 	// Function to recursively count all child elements
@@ -66,10 +76,10 @@
 		h: Decimal(10000),
 		fov: Decimal(0.0)
 	});
-	let dispatch = createEventDispatcher();
 
-	// Reactive statement to count all child elements
-	$: if (BROWSER && containerElement) {
+	// Was `$:` — an effect, because it WRITES state (the element count) rather than deriving a value
+	$effect(() => {
+		if (!BROWSER || !containerElement) return;
 		totalElementCount = countAllChildElements(containerElement);
 
 		let to_check = {
@@ -86,7 +96,7 @@
 
 			previous_to_check = to_check;
 		}
-	}
+	});
 
 	/**
 	 * Focuses the camera on a specified rectangle area within the ZUI.
@@ -138,7 +148,7 @@
 						//notify("hold event, ignoring tap");
 					} else {
 						if (e.target.id == id) {
-							dispatch('background-tap', {
+							onbackgroundtap?.({
 								taps: holder['data-tapcount'],
 								source: id
 							});
@@ -172,7 +182,7 @@
 				// We'll see later if we need to do this
 				// if (world.ZOOMING || world.PANNING || $ui_store.app.devMode) return;
 
-				dispatch('background-hold', {
+				onbackgroundhold?.({
 					source: id,
 					x: evt.pageX,
 					y: evt.pageY,
@@ -181,7 +191,7 @@
 				});
 			})
 			.on('up', function (evt) {
-				dispatch('background-hold-stop', {
+				onbackgroundholdstop?.({
 					source: id,
 					evt: evt
 					// Might need other params
@@ -288,15 +298,15 @@
 		$camera.fov = Decimal((0.5 / Math.tan(Math.PI / 8)) * $screen.h);
 	};
 
-	// Reactive camera setup
-	$: if (BROWSER) {
+	// Reactive camera setup — an effect: it reacts to the screen store and writes the camera
+	$effect(() => {
+		if (!BROWSER) return;
 		let current_screen = JSON.stringify($screen);
 		if (current_screen != previous_screen) {
-			// console.log("Screen dims changed : " + JSON.stringify($screen, null, ' '));
 			screenResized();
 			previous_screen = current_screen;
 		}
-	}
+	});
 
 	/**
 	 * Moves the camera to look at a specific point with a given scale.
@@ -434,9 +444,9 @@
 	setContext('focusOn', focusOn);
 
 	// Reactive statement to adjust precision
-	$: if (BROWSER) {
-		adjustDecimalPrecision($camera.scale);
-	}
+	$effect(() => {
+		if (BROWSER) adjustDecimalPrecision($camera.scale);
+	});
 </script>
 
 <div
@@ -446,7 +456,7 @@
 	bind:this={containerElement}
 >
 	<!-- debug: {debug} -->
-	<slot />
+	{@render children?.()}
 </div>
 {#if debug}
 	<div
