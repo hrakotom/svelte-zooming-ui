@@ -2,7 +2,6 @@ import UUID from "pure-uuid";
 import { writable } from 'svelte/store';
 import Decimal from "decimal.js";
 import anime from "animejs";
-import { beforeUpdate } from 'svelte'
 
 /**
  * Collection of utility functions for the Svelte Zooming UI library.
@@ -68,8 +67,6 @@ export function intersectsBBox(r1, r2) {
  */
 export function positionObserved(el, store) {
 
-  let dirty;
-
   let updater = function (node) {
     //console.log("Handling update or set...");
     let rect = node.getBoundingClientRect();
@@ -82,16 +79,12 @@ export function positionObserved(el, store) {
   };
 
 
-  beforeUpdate(() => {
-    if (dirty) store.set(updater(el))
-    dirty = false;
-  });
-
+  // No beforeUpdate: it is legacy-only and THROWS in runes mode (lifecycle_legacy_only), and it was
+  // redundant anyway — the ResizeObserver below already writes the store on every change, including
+  // the initial observation. Reported by a consumer once the components became runes, 2026-08-19.
   if (ResizeObserver) {
     const resizeObserver = new ResizeObserver(entries => {
       for (let entry of entries) {
-        dirty = true;
-        //force before update to run;
         store.set(updater(entry.target));
       }
     });

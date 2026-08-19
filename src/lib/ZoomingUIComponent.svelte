@@ -317,6 +317,19 @@
 	 * @param {number} [duration=300] - The duration of the camera movement in milliseconds.
 	 * @param {string} [easing='easeInOutCubic'] - The easing function to use for the camera movement.
 	 */
+	/**
+	 * Is this a Decimal? Asked by DUCK-TYPING, never `instanceof`.
+	 *
+	 * A consumer that installs its own decimal.js gets a different constructor, so `instanceof
+	 * Decimal` is false for a perfectly good Decimal — and lookAt then mistook one for a params
+	 * object and read `.scale` off it: "[DecimalError] Invalid argument: undefined" (reported by a
+	 * consumer 2026-08-19). Every Decimal carries these methods whichever copy minted it.
+	 * @param {any} v
+	 */
+	function isDecimal(v) {
+		return !!v && typeof v === 'object' && typeof v.dividedBy === 'function' && typeof v.times === 'function';
+	}
+
 	export function lookAt (x, y, scale, duration, easing) {
 		// console.log(id + ': Camera is moving: ' + JSON.stringify([x, y, scale], null, ' '));
 
@@ -324,7 +337,7 @@
 		if (duration === null || duration === undefined) duration = 300;
 		if (easing === null || easing === undefined) easing = 'easeInOutCubic';
 
-		if (typeof x == 'object' && !(x instanceof Decimal)) {
+		if (typeof x == 'object' && !isDecimal(x)) {
 			param = x;
 		} else {
 			param = {
@@ -335,7 +348,7 @@
 		}
 
 		['x', 'y', 'scale'].forEach(function (item) {
-			if (!(param[item] instanceof Decimal)) param[item] = Decimal(param[item]);
+			if (!isDecimal(param[item])) param[item] = Decimal(param[item]);
 			// $ui_store.world._tgt_camera[item] = param[item];
 		});
 

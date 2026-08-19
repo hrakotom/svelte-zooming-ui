@@ -33,7 +33,8 @@
     "!dist/**/*.spec.*"
   ],
   "peerDependencies": {
-    "svelte": "^5.0.0"
+    "svelte": "^5.0.0",
+    "decimal.js": "^10.4.3"
   },
   "devDependencies": {
     "@playwright/test": "^1.28.1",
