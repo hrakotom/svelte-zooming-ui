@@ -1,7 +1,6 @@
 import UUID from "pure-uuid";
 import { writable } from 'svelte/store';
 import Decimal from "decimal.js";
-import anime from "animejs";
 
 /**
  * Collection of utility functions for the Svelte Zooming UI library.

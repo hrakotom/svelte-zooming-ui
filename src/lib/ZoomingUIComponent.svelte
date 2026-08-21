@@ -15,7 +15,7 @@
 	import Decimal from 'decimal.js';
 	import lodash from 'lodash';
 	import interact from 'interactjs';
-	import anime from 'animejs';
+	import { animate } from 'animejs';
 	import compare from 'just-compare';
 
 	/**
@@ -375,12 +375,16 @@
 
 		var o = { value: 0 };
 
-		tween_camera = anime({
-			targets: o,
+		// anime.js v4: the target is the first argument, and the callbacks were
+		// renamed (`update`/`complete` -> `onUpdate`/`onComplete`). v4 also drops
+		// the `ease` prefix from easing names, so 'easeInOutCubic' is 'inOutCubic'
+		// — accept either, since the public `focusOn`/`lookAt` signatures document
+		// the old spelling and callers in the wild pass it.
+		tween_camera = animate(o, {
 			value: 1,
-			easing: easing,
+			ease: String(easing).replace(/^ease/, (m) => '').replace(/^([A-Z])/, (c) => c.toLowerCase()),
 			duration: duration,
-			update: function (anim) {
+			onUpdate: function (anim) {
 				$camera.x = initial.x.plus(dx.times(o.value));
 				$camera.y = initial.y.plus(dy.times(o.value));
 				$camera.z = initial.z.plus(dz.times(o.value));
@@ -389,7 +393,7 @@
 				}
 				$camera.scale = $camera.fov.dividedBy($camera.z);
 			},
-			complete: function (anim) {
+			onComplete: function (anim) {
 				tween_camera = null;
 				// console.log(id + ': Camera has finished moving');
 			}

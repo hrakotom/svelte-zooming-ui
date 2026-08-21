@@ -12,6 +12,8 @@
     import Clickable from '$lib/Clickable.svelte';
     import Embedded from '$lib/Embedded.svelte';
     import LOD from '$lib/LOD.svelte';
+    import ForceGraph from '$lib/ForceGraph.svelte';
+    export let data;
     import Decimal from 'decimal.js';
     import { fade } from 'svelte/transition';
     import { onMount, createEventDispatcher } from 'svelte';
@@ -26,6 +28,10 @@
         },
         "full-screen-and-lod" : {
             "label" : "Full screen and LOD",
+            "selected" : false,
+        },
+        "force-directed" : {
+            "label" : "Force-directed tree",
             "selected" : false,
         },
     };
@@ -132,5 +138,16 @@
                 <div style="position:absolute;bottom:2%;left:50%;transform:translate(-50%,0%);font-size:50px;font-weight:900;display:flex;text-align:center;color:red;border:solid rgba(0,0,0,.4) 1px;padding:11px;">Zoom on me!</div>
             </Positionable>
         </ZUI>
+    </div>
+{/if}
+
+{#if menu['force-directed'].selected}
+    <div style="border:solid green 0px;width:100%;height:100%;top:0px;left:0px;position:absolute;box-sizing:border-box;z-index:1;background:#f7f7f5;">
+        <ZUI on:zui-notification={handleZuiNotification} debug={false}>
+            <ForceGraph data={data.tree} initialDepth={1} />
+        </ZUI>
+    </div>
+    <div style="position:absolute;bottom:10px;left:10px;z-index:9999;font:400 12px/1.5 system-ui;color:#333;background:rgba(255,255,255,.85);padding:8px 11px;border-radius:6px;">
+        {data.live ? 'Live from the hex4 Freenet contract' : 'hex4 unreachable — fallback data'} &middot; click a node to re-centre &middot; wheel to zoom &middot; drag to pan
     </div>
 {/if}
