@@ -1,5 +1,6 @@
 import ZoomingUIComponent from './ZoomingUIComponent.svelte';
 import Positionable from './Positionable.svelte';
+import { keepAlive } from './keepAlive.svelte.js';
 
 /**
  * A zooming interface: a camera, and boxes placed in a world.
@@ -13,5 +14,10 @@ import Positionable from './Positionable.svelte';
  * camera is scaling it, for strokes that must stay one device pixel) and `ratio`
  * (how much screen it occupies, for level of detail). `Clickable`, `Embedded`
  * and `LOD` are worked examples of all three.
+ *
+ * A box can animate to a new position (`transition`) and INTO existence
+ * (`enter_from`). It cannot animate out of one — by the time the data drops an
+ * item its component is already being destroyed — so exit lives in `keepAlive`,
+ * which is a property of the list rather than of the box.
  */
-export { ZoomingUIComponent, Positionable };
+export { ZoomingUIComponent, Positionable, keepAlive };

@@ -6,7 +6,7 @@
 	 * This component is essential for positioning and rendering elements at the correct scale and position.
 	 * @component
 	 */
-	import { onMount, onDestroy, getContext, setContext } from 'svelte';
+	import { onMount, onDestroy, getContext, setContext, untrack } from 'svelte';
 	import { BROWSER } from 'esm-env';
 	import Decimal from 'decimal.js';
 	import { evaluateCoords } from '$lib/utils.js';
@@ -16,6 +16,8 @@
 	/**
 	 * @type {{ x: any, y: any, width: any, height: any, depth: any, reference_width?: number,
 	 *          debug?: boolean, pointer_events?: string | null,
+	 *          transition?: number, easing?: string,
+	 *          enter_from?: { x?: any, y?: any, width?: any, height?: any } | null,
 	 *          children?: import('svelte').Snippet,
 	 *          positionable?: import('svelte').Snippet }}
 	 */
@@ -35,9 +37,114 @@
 		 * made the ring appear.
 		 */
 		pointer_events = null,
+		/**
+		 * Milliseconds to spend animating to a new x/y/width/height. `0` (the
+		 * default) sets them immediately, which is the old behaviour.
+		 *
+		 * DEFAULT OFF ON PURPOSE. If your positions come from a per-frame source — a
+		 * force simulation, a physics step, a scroll — a transition restarts on every
+		 * one of those frames toward a target that has already moved, and the box
+		 * trails the truth by `transition` ms forever. Turn this on for boxes placed
+		 * from DATA, where every change would otherwise be a teleport; leave it off
+		 * for boxes placed by something that is already animating them.
+		 */
+		transition = 0,
+		/** `linear` | `quad-out` | `cubic-out` | `cubic-in-out` | `cubic-in`. */
+		easing = 'cubic-out',
+		/**
+		 * Where the box animates FROM on first appearance. Any subset of
+		 * x/y/width/height; whatever is omitted starts at its final value.
+		 *
+		 * This is the cheap half of saying where something came from. A box that
+		 * grows out of its parent has explained its own origin; one that materialises
+		 * in place has not. Needs `transition` to be non-zero to do anything.
+		 */
+		enter_from = null,
 		children,
 		positionable
 	} = $props();
+
+	/**
+	 * Easings, inlined rather than pulled from a library. Four curves is not worth a
+	 * dependency, and the camera's own tween already carries anime.js for the cases
+	 * that want more.
+	 */
+	const EASINGS = {
+		'linear': (t) => t,
+		'quad-out': (t) => t * (2 - t),
+		'cubic-out': (t) => 1 - Math.pow(1 - t, 3),
+		'cubic-in': (t) => t * t * t,
+		'cubic-in-out': (t) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2)
+	};
+
+	/**
+	 * The box as DRAWN, which is not always the box as asked for.
+	 *
+	 * Everything downstream — the transform, the culling test, `$frame`, and so
+	 * every stroke width and LOD band a child derives from it — reads these and not
+	 * the props. Otherwise a box would animate while its contents rendered for
+	 * where it was going, which looks like the content is sliding inside the box.
+	 */
+	let shown = $state({ x, y, width, height });
+
+	/** Interpolate in Decimal. The camera adjusts Decimal precision at depth, and
+	    doing this in doubles throws that away exactly where it is needed most. */
+	const lerp = (from, to, t) => Decimal(from).plus(Decimal(to).minus(Decimal(from)).times(t));
+
+	let tween = null;
+	let tween_raf = 0;
+
+	function animateTo(target) {
+		const ease = EASINGS[easing] ?? EASINGS['cubic-out'];
+		// Retarget from where the box IS, not from where the last tween started, so
+		// a new destination mid-flight bends the path instead of snapping back.
+		//
+		// UNTRACKED, and this is not optional. This runs inside the effect that
+		// watches x/y/width/height, and the rAF below writes `shown` on every frame.
+		// Read it normally and the effect depends on the thing it is animating: each
+		// frame retriggers the effect, which restarts the tween from a fresh `t0`,
+		// which schedules another frame. The tween never completes, the effect never
+		// stops, and the tab locks up hard enough that devtools cannot be opened.
+		tween = { from: untrack(() => ({ ...shown })), to: target, t0: performance.now() };
+		if (tween_raf) return;
+		const step = () => {
+			const t = Math.min(1, (performance.now() - tween.t0) / transition);
+			const e = ease(t);
+			shown = {
+				x: lerp(tween.from.x, tween.to.x, e),
+				y: lerp(tween.from.y, tween.to.y, e),
+				width: lerp(tween.from.width, tween.to.width, e),
+				height: lerp(tween.from.height, tween.to.height, e)
+			};
+			tween_raf = t < 1 ? requestAnimationFrame(step) : 0;
+			if (t >= 1) tween = null;
+		};
+		tween_raf = requestAnimationFrame(step);
+	}
+
+	let entered = false;
+
+	$effect(() => {
+		if (!BROWSER) return;
+		const target = { x, y, width, height };
+		if (!transition) {
+			shown = target;
+			return;
+		}
+		if (untrack(() => !entered)) {
+			entered = true;
+			// First paint starts at `enter_from` where given, its real value where
+			// not, and then runs the normal tween to the target.
+			shown = {
+				x: enter_from?.x ?? x,
+				y: enter_from?.y ?? y,
+				width: enter_from?.width ?? width,
+				height: enter_from?.height ?? height
+			};
+			if (!enter_from) return;
+		}
+		animateTo(target);
+	});
 
 	/**
 	 * NO `will-change: transform` here, deliberately, and it must not come back.
@@ -72,15 +179,19 @@
 
 	$effect(() => {
 		if (!BROWSER) return;
-		$frame.x = x;
-		$frame.y = y;
-		$frame.width = width;
-		$frame.height = height;
+		$frame.x = shown.x;
+		$frame.y = shown.y;
+		$frame.width = shown.width;
+		$frame.height = shown.height;
 		$frame.depth = depth;
 	});
 
 	onMount(function () {
 		// console.log("Props: " + JSON.stringify(Object.keys($$props), null, ' '));
+	});
+
+	onDestroy(() => {
+		if (tween_raf) cancelAnimationFrame(tween_raf);
 	});
 
 	let lookAt = getContext('lookAt');
@@ -89,10 +200,10 @@
 		if (!BROWSER) return;
 
 		let to_check = {
-            x: x,
-            y: y,
-            width: width,
-            height: height,
+            x: shown.x,
+            y: shown.y,
+            width: shown.width,
+            height: shown.height,
             depth: depth,
             reference_width: Decimal(reference_width),
             camera: $camera,
