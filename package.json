@@ -14,12 +14,13 @@
     "build": "vite build && npm run package",
     "preview": "vite preview",
     "package": "svelte-kit sync && svelte-package && publint",
-    "prepublishOnly": "npm version patch && git push --follow-tags && npm run package",
+    "prepublishOnly": "npm run package",
     "test": "npm run test:integration && npm run test:unit",
     "test:integration": "playwright test",
     "test:unit": "vitest",
     "lint": "prettier --plugin-search-dir . --check .",
-    "format": "prettier --plugin-search-dir . --write ."
+    "format": "prettier --plugin-search-dir . --write .",
+    "release": "npm run package && npm version patch && npm publish && git push --follow-tags"
   },
   "exports": {
     ".": {
